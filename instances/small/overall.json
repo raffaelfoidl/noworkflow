@@ -1,0 +1,82 @@
+[
+  {
+    "country": "Japan",
+    "city": "Tomobe",
+    "wind_speed": "137.5",
+    "classification": "Hurricane (level 12)",
+    "rank": 1,
+    "country_code": "JP"
+  },
+  {
+    "country": "Russia",
+    "city": "Rayevskaya",
+    "wind_speed": "130.0",
+    "classification": "Hurricane (level 12)",
+    "rank": 2,
+    "country_code": "RU"
+  },
+  {
+    "country": "Argentina",
+    "city": "R\u00edo Segundo",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 3,
+    "country_code": "AR"
+  },
+  {
+    "country": "China",
+    "city": "Qinhe",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 4,
+    "country_code": "CN"
+  },
+  {
+    "country": "El Salvador",
+    "city": "Victoria",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 5,
+    "country_code": "SV"
+  },
+  {
+    "country": "Poland",
+    "city": "P\u0119powo",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 6,
+    "country_code": "PL"
+  },
+  {
+    "country": "Russia",
+    "city": "Pregradnaya",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 7,
+    "country_code": "RU"
+  },
+  {
+    "country": "Serbia",
+    "city": "Boljevci",
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)",
+    "rank": 8,
+    "country_code": "RS"
+  },
+  {
+    "country": "China",
+    "city": "Dalongzhan",
+    "wind_speed": "129.8",
+    "classification": "Hurricane (level 12)",
+    "rank": 9,
+    "country_code": "CN"
+  },
+  {
+    "country": "Indonesia",
+    "city": "Balakasap",
+    "wind_speed": "129.8",
+    "classification": "Hurricane (level 12)",
+    "rank": 10,
+    "country_code": "ID"
+  }
+]

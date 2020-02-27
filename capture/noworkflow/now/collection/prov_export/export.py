@@ -5,6 +5,8 @@ import prov.model as provo
 import prov.dot as provo_dot
 import datetime
 
+from noworkflow.now.collection.prov_export import module_deps, function_defs, environment_attrs, \
+    function_activations, file_accesses
 from noworkflow.now.persistence.models import Trial, Module, FunctionDef, Object, EnvironmentAttr, FileAccess, \
     Activation, ObjectValue
 from noworkflow.now.utils.functions import wrap
@@ -103,194 +105,9 @@ def print_trial_relationship(relation, breakline="\n\n", other="\n    "):
     print(breakline.join(output))
 
 
-def export_module_deps(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting module dependencies", True)
-    for module in trial.modules:  # type: Module
-        document.entity("module{}".format(module.id),
-                        [(provo.PROV_LABEL, module.name),
-                         (provo.PROV_TYPE, "moduleDependency"),
-                         ("version", module.version),
-                         ("path", module.path),
-                         ("codeHash", module.code_hash)])
 
 
-def export_function_defs(trial: Trial, document: provo.ProvBundle):
-    def function_definitions():
-        document.activity("functionDefinition{}".format(function.id), None, None,
-                          [(provo.PROV_LABEL, function.name),
-                           (provo.PROV_TYPE, "functionDefinition"),
-                           ("codeHash", function.code_hash),
-                           ("firstLine", function.first_line),
-                           ("lastLine", function.last_line),
-                           ("docString", function.docstring.strip() if len(function.docstring.strip()) > 0 else None)])
 
-    def argument_definitions():
-        for arg in function.arguments:  # type: Object
-            document.entity("argumentDefinition{}".format(arg.id),
-                            [(provo.PROV_LABEL, arg.name),
-                             (provo.PROV_TYPE, "argumentDefinition")])
-
-    def argument_usage_definitions():
-        for arg in function.arguments:  # type: Object
-            document.used("functionDefinition{}".format(function.id),
-                          "argumentDefinition{}".format(arg.id),
-                          None,
-                          "funcDef{}UsedArgDef{}".format(function.id, arg.id),
-                          [(provo.PROV_ROLE, "argument"),
-                           (provo.PROV_TYPE, "argumentDefinition")])
-
-    def global_definitions():
-        for glob in function.globals:  # type: Object
-            document.entity("globalDefinition{}".format(glob.id),
-                            [(provo.PROV_LABEL, glob.name),
-                             (provo.PROV_TYPE, "globalDefinition")])
-
-    def global_usage_definitions():
-        for glob in function.globals:  # type: Object
-            document.used("functionDefinition{}".format(function.id),
-                          "globalDefinition{}".format(glob.id),
-                          None,
-                          "funcDef{}UsedGlobalDef{}".format(function.id, glob.id),
-                          [(provo.PROV_ROLE, "global"),
-                           (provo.PROV_TYPE, "globalDefinition")])
-
-    def call_definitions():
-        for call in function.function_calls:  # type: Object
-            document.activity("callDefinition{}".format(call.id), None, None,
-                              [(provo.PROV_LABEL, call.name),
-                               (provo.PROV_TYPE, "callDefinition")])
-
-    def call_usage_definitions():
-        for call in function.function_calls:  # type: Object
-            document.wasInformedBy("callDefinition{}".format(call.id),
-                                   "functionDefinition{}".format(function.id),
-                                   "funcDef{}CalledBy{}".format(function.id, call.id),
-                                   [(provo.PROV_ROLE, "call"),
-                                    (provo.PROV_TYPE, "callDefinition")])
-
-    print_msg("Exporting function definitions", True)
-    for function in trial.function_defs:  # type: FunctionDef
-        function_definitions()
-
-        argument_definitions()
-        argument_usage_definitions()
-
-        global_definitions()
-        global_usage_definitions()
-
-        call_definitions()
-        call_usage_definitions()
-
-
-def export_environment_attrs(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting environment conditions", True)
-
-    collection = document.collection("environmentAttributes")
-
-    for env_attr in trial.environment_attrs:  # type: EnvironmentAttr
-        document.entity("environmentAttribute{}".format(env_attr.id),
-                        [(provo.PROV_LABEL, env_attr.name),
-                         (provo.PROV_VALUE, env_attr.value),
-                         (provo.PROV_TYPE, "environmentAttribute")])
-
-    for env_attr in trial.environment_attrs:  # type: EnvironmentAttr
-        collection.hadMember("environmentAttribute{}".format(env_attr.id))
-
-    print_trial_relationship(trial.environment_attrs, breakline="\n", other="\n  ")
-
-
-def export_file_accesses(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting file accesses", True)
-
-    for f_access in trial.file_accesses:  # type: FileAccess
-        document.activity("fileAccess{}".format(f_access.id), None, None,
-                          [(provo.PROV_LOCATION, f_access.name),
-                           (provo.PROV_TYPE, f_access.mode),
-                           (provo.PROV_ATTR_TIME, f_access.timestamp),
-                           ("buffering", f_access.buffering),
-                           ("functionActivationId", f_access.function_activation_id),  # Todo match
-                           ("caller", f_access.caller),  # todo match
-                           ("contentHashBefore", f_access.content_hash_before),
-                           ("contentHashAfter", f_access.content_hash_after)])
-
-    print_trial_relationship(trial.file_accesses)
-
-
-def export_function_activations(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting function activations", True)
-    for act in trial.initial_activations:  # type: Activation
-        export_function_activation(trial, act, document)
-
-
-def export_function_activation(trial: Trial, activation: Activation, document: provo.ProvBundle, level: int = 1):
-    """Print function activation recursively"""
-    text = wrap(
-        "{0.line}: {0.name} ({0.start} - {0.finish})".format(activation),
-        initial="  " * level)
-    indent = text.index(": ") + 2
-    print(text)
-    activation.show(_print=lambda x, offset=0: print(
-        wrap(x, initial=" " * (indent + offset))))
-
-    document.activity("functionActivation{}".format(activation.id),
-                      activation.start,
-                      activation.finish,
-                      [(provo.PROV_LABEL, activation.name),
-                       (provo.PROV_TYPE, "functionActivation"),
-                       ("line", activation.line),
-                       ("caller", "functionActivation{}".format(activation.caller_id)) if
-                       activation.caller_id is not None else (None, None)])
-
-    if activation.caller_id is not None:
-        document.wasInformedBy("functionActivation{}".format(activation.id),
-                               "functionActivation{}".format(activation.caller_id),
-                               "funcAct{}CalledBy{}".format(activation.id, activation.caller_id))
-
-    args = list(activation.arguments)
-    if args:
-        for arg in args:  # type: ObjectValue
-            document.entity("argumentActivation{}".format(arg.id),
-                            [(provo.PROV_LABEL, arg.name),
-                             (provo.PROV_VALUE, arg.value),
-                             (provo.PROV_TYPE, "argumentActivation")])
-
-            document.used("functionActivation{}".format(arg.function_activation_id),
-                          "argumentActivation{}".format(arg.id),
-                          activation.start,
-                          "funcAct{}UsedArgAct{}".format(activation.id, arg.id),
-                          [(provo.PROV_ROLE, "argument"),
-                           (provo.PROV_TYPE, "argumentActivation")])
-
-    globs = list(activation.globals)
-    if globs:
-        for glob in globs:  # type: ObjectValue
-            document.entity("globalActivation{}".format(glob.id),
-                            [(provo.PROV_LABEL, glob.name),
-                             (provo.PROV_VALUE, glob.value),
-                             (provo.PROV_TYPE, "globalActivation")])
-
-            document.used("functionActivation{}".format(glob.function_activation_id),
-                          "globalActivation{}".format(glob.id),
-                          activation.start,
-                          "funcAct{}UsedGlobalAct{}".format(activation.id, glob.id),
-                          [(provo.PROV_ROLE, "global"),
-                           (provo.PROV_TYPE, "globalActivation")])
-
-    if activation.return_value is not None and activation.return_value != "None":
-        document.entity("funcAct{}ReturnValue".format(activation.id),
-                        [(provo.PROV_VALUE, activation.return_value),
-                         (provo.PROV_TYPE, "returnValue")])
-
-        document.wasGeneratedBy("funcAct{}ReturnValue".format(activation.id),
-                                "functionActivation{}".format(activation.id),
-                                activation.finish,
-                                "funcAct{}RetValGeneration".format(activation.id))
-
-    if len(list(activation.variables)) > 0:
-        print("#: " + list(activation.variables)[0].name)
-
-    for inner_activation in activation.children:
-        export_function_activation(trial, inner_activation, document, level + 1)
 
 
 def export_basic_info(trial: Trial, document: provo.ProvDocument):
@@ -314,19 +131,19 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
     export_basic_info(trial, document)
 
     if args.modules:
-        export_module_deps(trial, document.bundle("trial{}ModuleDependencies".format(trial.id)))
+        module_deps.export(trial, document.bundle("trial{}ModuleDependencies".format(trial.id)))
 
     if args.function_defs:
-        export_function_defs(trial, document.bundle("trial{}FunctionDefinitions".format(trial.id)))
+        function_defs.export(trial, document.bundle("trial{}FunctionDefinitions".format(trial.id)))
 
     if args.environment:
-        export_environment_attrs(trial, document.bundle("trial{}Environment".format(trial.id)))
+        environment_attrs.export(trial, document.bundle("trial{}Environment".format(trial.id)))
 
     if args.function_activations:
-        export_function_activations(trial, document.bundle("trial{}FunctionActivations".format(trial.id)))
+        function_activations.export(trial, document.bundle("trial{}FunctionActivations".format(trial.id)))
 
     if args.file_accesses:
-        export_file_accesses(trial, document.bundle("trial{}FileAccesses".format(trial.id)))
+        file_accesses.export(trial, document.bundle("trial{}FileAccesses".format(trial.id)))
 
     with open(name + "." + format, 'w') as file:
         document.serialize(destination=file, format=format)

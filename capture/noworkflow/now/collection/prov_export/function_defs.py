@@ -5,7 +5,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting function definitions", True)
+    print_msg("Exporting function definitions")
     for function in trial.function_defs:  # type: FunctionDef
         _function_definitions(document, function)
 

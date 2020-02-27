@@ -5,7 +5,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting environment conditions", True)
+    print_msg("Exporting environment conditions")
 
     collection = document.collection("environmentAttributes")
 

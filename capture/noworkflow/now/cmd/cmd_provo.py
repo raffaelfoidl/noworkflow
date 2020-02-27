@@ -9,11 +9,9 @@ from __future__ import (absolute_import, print_function,
 import os
 
 from ..collection.prov_export.export import export_prov
-from ..ipython.converter import create_ipynb
 from ..persistence.models import Trial
 from ..persistence import persistence_config
-from ..utils.functions import wrap
-from ..utils.io import print_msg
+from ..utils import io
 
 from .command import Command
 
@@ -35,6 +33,8 @@ class ProvO(Command):
                 help="shows function activations")
         add_arg("-f", "--file-accesses", action="store_true",
                 help="shows read/write access to files")
+        add_arg("-v", "--verbose", action="store_true",
+                help="increase output verbosity")
         add_arg("--dir", type=str,
                 help="set project path where is the database. Default to "
                      "current directory")
@@ -42,9 +42,9 @@ class ProvO(Command):
                 help="set the content database engine")
 
     def execute(self, args):
+        persistence_config.content_engine = args.content_engine
         persistence_config.connect_existing(args.dir or os.getcwd())
         trial = Trial(trial_ref=args.trial)
 
+        io.verbose = args.verbose
         export_prov(trial, args)
-        # output = export_prov(trial)
-        # print(output)

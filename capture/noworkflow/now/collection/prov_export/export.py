@@ -8,7 +8,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export_basic_info(trial: Trial, document: provo.ProvDocument):
-    print_msg("Exporting basic trial information", True)
+    print_msg("Exporting basic trial information")
     document.bundle("trial{}".format(trial.id))
 
     document.entity("trial{}Info".format(trial.id),
@@ -25,6 +25,7 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
     document = provo.ProvDocument()
     document.set_default_namespace("https://github.com/gems-uff/noworkflow")
 
+    print_msg("Exporting provenance of trial {} in PROV-O format".format(trial.id), force=True)
     export_basic_info(trial, document)
 
     if args.modules:
@@ -42,6 +43,9 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
     if args.file_accesses:
         file_accesses.export(trial, document.bundle("trial{}FileAccesses".format(trial.id)))
 
+    print_msg("Persisting collected provenance to local storage")
     with open(name + "." + format, 'w') as file:
         document.serialize(destination=file, format=format)
         provo_dot.prov_to_dot(document).write_pdf(name + ".pdf")
+
+    print_msg("Export to file \"{}\" done.".format(name + "." + format), force=True)

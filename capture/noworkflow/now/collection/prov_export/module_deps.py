@@ -4,7 +4,7 @@ import prov.model as provo
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting module dependencies", True)
+    print_msg("Exporting module dependencies")
     for module in trial.modules:  # type: Module
         document.entity("module{}".format(module.id),
                         [(provo.PROV_LABEL, module.name),

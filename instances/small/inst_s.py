@@ -25,6 +25,7 @@ def parse_args():
 
 
 def read_file(path: str) -> List[Entry]:
+    """Reads the CSV input data as NamedTuple"""
     global Entry
     with open(path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")

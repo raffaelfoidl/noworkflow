@@ -10,6 +10,7 @@ import argparse
 import sys
 import sqlalchemy
 
+from .cmd_provo import ProvO
 from .command import Command, SmartFormatter
 from .cmd_run import Run
 from .cmd_debug import Debug
@@ -50,7 +51,8 @@ def main():
         Helper(),
         History(),
         Schema(),
-        GC()
+        GC(),
+        ProvO()
 
     ]
     for cmd in commands:
@@ -85,4 +87,5 @@ __all__ = [
     "History",
     "GC",
     "main",
+    "ProvO"
 ]

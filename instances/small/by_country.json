@@ -1,7 +1,5 @@
 [
   {
-    "country": "Saint Lucia",
-    "rank": 1,
     "avg_wind_speed": 124.94999999999999,
     "entries": [
       {
@@ -13,12 +11,12 @@
         "speed": "124.3"
       }
     ],
+    "country_code": "LC",
     "classification": "Hurricane (level 12)",
-    "country_code": "LC"
+    "rank": 1,
+    "country": "Saint Lucia"
   },
   {
-    "country": "Reunion",
-    "rank": 2,
     "avg_wind_speed": 120.65,
     "entries": [
       {
@@ -38,12 +36,12 @@
         "speed": "115.3"
       }
     ],
+    "country_code": "RE",
     "classification": "Hurricane (level 12)",
-    "country_code": "RE"
+    "rank": 2,
+    "country": "Reunion"
   },
   {
-    "country": "San Marino",
-    "rank": 3,
     "avg_wind_speed": 117.3,
     "entries": [
       {
@@ -51,12 +49,12 @@
         "speed": "117.3"
       }
     ],
+    "country_code": "SM",
     "classification": "Violent Storm (level 11)",
-    "country_code": "SM"
+    "rank": 3,
+    "country": "San Marino"
   },
   {
-    "country": "Saint Vincent and the Grenadines",
-    "rank": 4,
     "avg_wind_speed": 114.4,
     "entries": [
       {
@@ -64,12 +62,12 @@
         "speed": "114.4"
       }
     ],
+    "country_code": "VC",
     "classification": "Violent Storm (level 11)",
-    "country_code": "VC"
+    "rank": 4,
+    "country": "Saint Vincent and the Grenadines"
   },
   {
-    "country": "Samoa",
-    "rank": 5,
     "avg_wind_speed": 111.69999999999999,
     "entries": [
       {
@@ -81,12 +79,12 @@
         "speed": "103.6"
       }
     ],
+    "country_code": "WS",
     "classification": "Violent Storm (level 11)",
-    "country_code": "WS"
+    "rank": 5,
+    "country": "Samoa"
   },
   {
-    "country": "Malta",
-    "rank": 6,
     "avg_wind_speed": 109.64999999999999,
     "entries": [
       {
@@ -106,12 +104,12 @@
         "speed": "95.7"
       }
     ],
+    "country_code": "MT",
     "classification": "Violent Storm (level 11)",
-    "country_code": "MT"
+    "rank": 6,
+    "country": "Malta"
   },
   {
-    "country": "Jamaica",
-    "rank": 7,
     "avg_wind_speed": 104.73333333333333,
     "entries": [
       {
@@ -139,12 +137,12 @@
         "speed": "104.0"
       }
     ],
+    "country_code": "JM",
     "classification": "Violent Storm (level 11)",
-    "country_code": "JM"
+    "rank": 7,
+    "country": "Jamaica"
   },
   {
-    "country": "Puerto Rico",
-    "rank": 8,
     "avg_wind_speed": 102.80000000000001,
     "entries": [
       {
@@ -156,12 +154,12 @@
         "speed": "112.9"
       }
     ],
+    "country_code": "PR",
     "classification": "Whole gale or Storm (level 10)",
-    "country_code": "PR"
+    "rank": 8,
+    "country": "Puerto Rico"
   },
   {
-    "country": "Saint Kitts and Nevis",
-    "rank": 9,
     "avg_wind_speed": 102.0,
     "entries": [
       {
@@ -169,12 +167,12 @@
         "speed": "102.0"
       }
     ],
+    "country_code": "KN",
     "classification": "Whole gale or Storm (level 10)",
-    "country_code": "KN"
+    "rank": 9,
+    "country": "Saint Kitts and Nevis"
   },
   {
-    "country": "Lesotho",
-    "rank": 10,
     "avg_wind_speed": 101.8,
     "entries": [
       {
@@ -186,7 +184,9 @@
         "speed": "87.3"
       }
     ],
+    "country_code": "LS",
     "classification": "Whole gale or Storm (level 10)",
-    "country_code": "LS"
+    "rank": 10,
+    "country": "Lesotho"
   }
 ]

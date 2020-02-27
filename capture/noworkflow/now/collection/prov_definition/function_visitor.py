@@ -17,7 +17,7 @@ from pyposast import extract_code
 from ...utils.cross_version import cross_compile
 
 
-class FunctionVisitor(ast.NodeVisitor):                                          # pylint: disable=too-many-instance-attributes
+class FunctionVisitor(ast.NodeVisitor):  # pylint: disable=too-many-instance-attributes
     """Identifies the function declarations and related data"""
 
     def __init__(self, metascript, file_definition):
@@ -58,10 +58,14 @@ class FunctionVisitor(ast.NodeVisitor):                                         
             ast.get_docstring(node)
         ))
 
+        if len(node.args.args) > 0:
+            for param in node.args.args:
+                self.objects.add(param.arg, "ARGUMENT", self.contexts[-1].id)
+
         self.generic_visit(node)
         self.contexts.pop()
 
-    def visit_ClassDef(self, node):                                              # pylint: disable=invalid-name
+    def visit_ClassDef(self, node):  # pylint: disable=invalid-name
         """Visit ClassDef. Ignore Classes"""
         # ToDo #74: capture class dry_add -> add_object
         # ToDo #74: "".encode("utf-8") -> self.extract_code(node),
@@ -79,11 +83,11 @@ class FunctionVisitor(ast.NodeVisitor):                                         
         self.generic_visit(node)
         self.contexts.pop()
 
-    def visit_FunctionDef(self, node):                                           # pylint: disable=invalid-name
+    def visit_FunctionDef(self, node):  # pylint: disable=invalid-name
         """Visit FunctionDef. Collect function code"""
         self.new_definition_context(node, typ="FUNCTION")
 
-    def visit_AsyncFunctionDef(self, node):                                      # pylint: disable=invalid-name
+    def visit_AsyncFunctionDef(self, node):  # pylint: disable=invalid-name
         """Visit AsyncFunctionDef. Collect function code. Python 3.5"""
         self.new_definition_context(node, typ="FUNCTION")
 
@@ -93,7 +97,7 @@ class FunctionVisitor(ast.NodeVisitor):                                         
         self.generic_visit(node)
         self.collecting_arguments = False
 
-    def visit_Global(self, node):                                                # pylint: disable=invalid-name
+    def visit_Global(self, node):  # pylint: disable=invalid-name
         """Visit Global. Collect globals"""
         definition = self.contexts[-1]
         for name in node.names:
@@ -108,15 +112,13 @@ class FunctionVisitor(ast.NodeVisitor):                                         
         self.objects.add(
             self.node_code(func), "FUNCTION_CALL", self.contexts[-1].id)
 
-    def visit_Call(self, node):                                                  # pylint: disable=invalid-name
+    def visit_Call(self, node):  # pylint: disable=invalid-name
         """Visit Call. Collect call"""
         self.call(node)
         self.generic_visit(node)
 
-    def visit_Name(self, node):                                                  # pylint: disable=invalid-name
+    def visit_Name(self, node):  # pylint: disable=invalid-name
         """Visit Name. Get names"""
-        if self.collecting_arguments:
-            self.objects.add(node.id, "ARGUMENT", self.contexts[-1].id)
         self.generic_visit(node)
 
     def teardown(self):

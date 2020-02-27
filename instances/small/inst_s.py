@@ -43,6 +43,7 @@ def read_file(path: str) -> List[Entry]:
 
 
 def get_classification(speed: float) -> Tuple[float, str]:
+    global root
     classes = {
         (0, 0., 1.85): "Calm",
         (1, 1.85, 7.41): "Light Airs",

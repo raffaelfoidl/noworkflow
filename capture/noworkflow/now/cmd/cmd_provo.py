@@ -8,6 +8,7 @@ from __future__ import (absolute_import, print_function,
 
 import os
 
+from ..collection.prov_export.export import export_prov
 from ..ipython.converter import create_ipynb
 from ..persistence.models import Trial
 from ..persistence import persistence_config
@@ -15,28 +16,6 @@ from ..utils.functions import wrap
 from ..utils.io import print_msg
 
 from .command import Command
-
-
-def print_trial_relationship(relation, breakline="\n\n", other="\n    "):
-    """Print trial relationship"""
-    output = []
-    for obj in relation:
-        obj.show(_print=lambda x: output.append(wrap(x, other=other)))
-    print(breakline.join(output))
-
-
-def print_function_activation(trial, activation, level=1):
-    """Print function activation recursively"""
-    text = wrap(
-        "{0.line}: {0.name} ({0.start} - {0.finish})".format(activation),
-        initial="  " * level)
-    indent = text.index(": ") + 2
-    print(text)
-    activation.show(_print=lambda x, offset=0: print(
-        wrap(x, initial=" " * (indent + offset))))
-
-    for inner_activation in activation.children:
-        print_function_activation(trial, inner_activation, level + 1)
 
 
 class ProvO(Command):
@@ -63,33 +42,9 @@ class ProvO(Command):
                 help="set the content database engine")
 
     def execute(self, args):
-        persistence_config.content_engine = args.content_engine
         persistence_config.connect_existing(args.dir or os.getcwd())
         trial = Trial(trial_ref=args.trial)
 
-        print_msg("trial information:", True)
-        trial.show(_print=lambda x: print(wrap(x)))
-
-        if args.modules:
-            print_msg("this trial depends on the following modules:", True)
-            print_trial_relationship(trial.modules)
-
-        if args.function_defs:
-            print_msg("this trial has the following functions:", True)
-            print_trial_relationship(trial.function_defs)
-
-        if args.environment:
-            print_msg("this trial has been executed under the following"
-                      " environment conditions", True)
-            print_trial_relationship(trial.environment_attrs, breakline="\n",
-                                     other="\n  ")
-
-        if args.function_activations:
-            print_msg("this trial has the following function activation "
-                      "graphF:", True)
-            for act in trial.initial_activations:                                # pylint: disable=not-an-iterable
-                print_function_activation(trial, act)
-
-        if args.file_accesses:
-            print_msg("this trial accessed the following files:", True)
-            print_trial_relationship(trial.file_accesses)
+        export_prov(trial, args)
+        # output = export_prov(trial)
+        # print(output)

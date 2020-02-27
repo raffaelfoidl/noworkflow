@@ -107,6 +107,7 @@ def export_module_deps(trial: Trial, document: provo.ProvBundle):
     for module in trial.modules:  # type: Module
         document.entity("module{}".format(module.id),
                         [(provo.PROV_LABEL, module.name),
+                         (provo.PROV_TYPE, "moduleDependency"),
                          ("version", module.version),
                          ("path", module.path),
                          ("codeHash", module.code_hash)])
@@ -177,8 +178,6 @@ def export_function_defs(trial: Trial, document: provo.ProvBundle):
         call_definitions()
         call_usage_definitions()
 
-    print_trial_relationship(trial.function_defs)
-
 
 def print_function_activation(trial, activation, level=1):
     """Print function activation recursively"""
@@ -194,11 +193,11 @@ def print_function_activation(trial, activation, level=1):
         print_function_activation(trial, inner_activation, level + 1)
 
 
-def export_basic_info(trial: Trial, document: provo.ProvDocument) -> provo.ProvBundle:
+def export_basic_info(trial: Trial, document: provo.ProvDocument):
     print_msg("Exporting basic trial information", True)
-    bundle = document.bundle("trial{}".format(trial.id))
+    document.bundle("trial{}".format(trial.id))
 
-    bundle.entity("trial{}Info".format(trial.id),
+    document.entity("trial{}Info".format(trial.id),
                   [(provo.PROV_TYPE, "trial"),
                    (provo.PROV_ATTR_STARTTIME, trial.start),
                    (provo.PROV_ATTR_ENDTIME, trial.finish),
@@ -207,20 +206,18 @@ def export_basic_info(trial: Trial, document: provo.ProvDocument) -> provo.ProvB
                    ("inheritedId", trial.inherited_id),
                    ("command", trial.command)])
 
-    return bundle
-
 
 def export_prov(trial: Trial, args, name="provo", format="provn"):
     document = provo.ProvDocument()
     document.set_default_namespace("https://github.com/gems-uff/noworkflow")
 
-    bundle = export_basic_info(trial, document)
+    export_basic_info(trial, document)
 
     if args.modules:
-        export_module_deps(trial, bundle)
+        export_module_deps(trial, document.bundle("trial{}ModuleDependencies".format(trial.id)))
 
     if args.function_defs:
-        export_function_defs(trial, bundle)
+        export_function_defs(trial, document.bundle("trial{}FunctionDefinitions".format(trial.id)))
 
     if args.environment:
         print_msg("this trial has been executed under the following"

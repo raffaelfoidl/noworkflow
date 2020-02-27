@@ -35,7 +35,7 @@ class FileAccess(AlchemyProxy):
         ForeignKeyConstraint(["trial_id"], ["trial.id"], ondelete="CASCADE"),
     )
     trial_id = Column(Integer, index=True)
-    id = Column(Integer, index=True)                                             # pylint: disable=invalid-name
+    id = Column(Integer, index=True)  # pylint: disable=invalid-name
     name = Column(Text)
     mode = Column(Text)
     buffering = Column(Text)
@@ -83,6 +83,20 @@ class FileAccess(AlchemyProxy):
         return " -> ".join(stack)
 
     @property
+    def caller(self):
+        """Return the second-highest function on the activation stack since the beginning of execution"""
+        stack = []
+        activation = self.activation
+        while activation:
+            name = activation.name
+            activation = activation.caller
+            if activation:
+                stack.insert(0, name)
+        if not stack or stack[-1] != "open":
+            return "/"  # no direct caller function available
+        return stack[-2]
+
+    @property
     def brief(self):
         """Brief description of file access"""
         result = "({0.mode}) {0.name}".format(self)
@@ -97,8 +111,8 @@ class FileAccess(AlchemyProxy):
     @property
     def is_internal(self):
         return (
-            not os.path.isabs(self.name) or
-            persistence_config.base_path in self.name
+                not os.path.isabs(self.name) or
+                persistence_config.base_path in self.name
         )
 
     @classmethod  # query
@@ -117,7 +131,7 @@ class FileAccess(AlchemyProxy):
         session = session or relational.session
         query = (
             session.query(model)
-            .filter(
+                .filter(
                 (model.name == name) &
                 (model.timestamp.like(timestamp + "%"))
             ).order_by(model.timestamp)
@@ -137,8 +151,8 @@ class FileAccess(AlchemyProxy):
         if not isinstance(other, FileAccess):
             return False
         return (
-            (self.content_hash_before == other.content_hash_before)
-            and (self.content_hash_after == other.content_hash_after)
+                (self.content_hash_before == other.content_hash_before)
+                and (self.content_hash_after == other.content_hash_after)
         )
 
     def show(self, _print=print):
@@ -160,7 +174,6 @@ class FileAccess(AlchemyProxy):
         result += """Function: {f.stack}\
             """
         _print(result.format(f=self))
-
 
     def __repr__(self):
         return "FileAccess({0.trial_id}, {0.id}, {0.name}, {0.mode})".format(

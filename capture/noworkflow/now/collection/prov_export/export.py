@@ -5,7 +5,7 @@ import prov.model as provo
 import prov.dot as provo_dot
 import datetime
 
-from noworkflow.now.persistence.models import Trial, Module, FunctionDef, Object, EnvironmentAttr
+from noworkflow.now.persistence.models import Trial, Module, FunctionDef, Object, EnvironmentAttr, FileAccess
 from noworkflow.now.utils.functions import wrap
 from noworkflow.now.utils.io import print_msg
 
@@ -196,6 +196,23 @@ def export_environment_attrs(trial: Trial, document: provo.ProvBundle):
     print_trial_relationship(trial.environment_attrs, breakline="\n", other="\n  ")
 
 
+def export_file_accesses(trial: Trial, document: provo.ProvBundle):
+    print_msg("Exporting file accesses", True)
+
+    for f_access in trial.file_accesses:  # type: FileAccess
+        document.activity("fileAccess{}".format(f_access.id), None, None,
+                          [(provo.PROV_LOCATION, f_access.name),
+                           (provo.PROV_TYPE, f_access.mode),
+                           (provo.PROV_ATTR_TIME, f_access.timestamp),
+                           ("buffering", f_access.buffering),
+                           ("functionActivationId", f_access.function_activation_id),  # Todo match
+                           ("functionCalling", f_access.caller),  # todo match
+                           ("contentHashBefore", f_access.content_hash_before),
+                           ("contentHashAfter", f_access.content_hash_after)])
+
+    print_trial_relationship(trial.file_accesses)
+
+
 def print_function_activation(trial, activation, level=1):
     """Print function activation recursively"""
     text = wrap(
@@ -246,8 +263,7 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
             print_function_activation(trial, act)
 
     if args.file_accesses:
-        print_msg("this trial accessed the following files:", True)
-        print_trial_relationship(trial.file_accesses)
+        export_file_accesses(trial, document.bundle("trial{}FileAccesses".format(trial.id)))
 
     with open(name + "." + format, 'w') as file:
         document.serialize(destination=file, format=format)

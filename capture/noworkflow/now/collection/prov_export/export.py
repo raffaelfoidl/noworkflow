@@ -5,7 +5,7 @@ import prov.model as provo
 import prov.dot as provo_dot
 import datetime
 
-from noworkflow.now.persistence.models import Trial, Module, FunctionDef, Object
+from noworkflow.now.persistence.models import Trial, Module, FunctionDef, Object, EnvironmentAttr
 from noworkflow.now.utils.functions import wrap
 from noworkflow.now.utils.io import print_msg
 
@@ -179,6 +179,23 @@ def export_function_defs(trial: Trial, document: provo.ProvBundle):
         call_usage_definitions()
 
 
+def export_environment_attrs(trial: Trial, document: provo.ProvBundle):
+    print_msg("Exporting environment conditions", True)
+
+    collection = document.collection("lala123")
+
+    for env_attr in trial.environment_attrs:  # type: EnvironmentAttr
+        document.entity("environmentAttribute{}".format(env_attr.id),
+                        [(provo.PROV_LABEL, env_attr.name),
+                         (provo.PROV_VALUE, env_attr.value),
+                         (provo.PROV_TYPE, "environmentAttribute")])
+
+    for env_attr in trial.environment_attrs:  # type: EnvironmentAttr
+        collection.hadMember("environmentAttribute{}".format(env_attr.id))
+
+    print_trial_relationship(trial.environment_attrs, breakline="\n", other="\n  ")
+
+
 def print_function_activation(trial, activation, level=1):
     """Print function activation recursively"""
     text = wrap(
@@ -198,13 +215,13 @@ def export_basic_info(trial: Trial, document: provo.ProvDocument):
     document.bundle("trial{}".format(trial.id))
 
     document.entity("trial{}Info".format(trial.id),
-                  [(provo.PROV_TYPE, "trial"),
-                   (provo.PROV_ATTR_STARTTIME, trial.start),
-                   (provo.PROV_ATTR_ENDTIME, trial.finish),
-                   ("codeHash", trial.code_hash),
-                   ("parentId", trial.parent_id),
-                   ("inheritedId", trial.inherited_id),
-                   ("command", trial.command)])
+                    [(provo.PROV_TYPE, "trial"),
+                     (provo.PROV_ATTR_STARTTIME, trial.start),
+                     (provo.PROV_ATTR_ENDTIME, trial.finish),
+                     ("codeHash", trial.code_hash),
+                     ("parentId", trial.parent_id),
+                     ("inheritedId", trial.inherited_id),
+                     ("command", trial.command)])
 
 
 def export_prov(trial: Trial, args, name="provo", format="provn"):
@@ -220,10 +237,7 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
         export_function_defs(trial, document.bundle("trial{}FunctionDefinitions".format(trial.id)))
 
     if args.environment:
-        print_msg("this trial has been executed under the following"
-                  " environment conditions", True)
-        print_trial_relationship(trial.environment_attrs, breakline="\n",
-                                 other="\n  ")
+        export_environment_attrs(trial, document.bundle("trial{}Environment".format(trial.id)))
 
     if args.function_activations:
         print_msg("this trial has the following function activation "

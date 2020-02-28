@@ -1,3 +1,5 @@
+import sys
+
 import prov.model as provo
 import prov.dot as provo_dot
 
@@ -21,9 +23,9 @@ def export_basic_info(trial: Trial, document: provo.ProvDocument):
                      ("command", trial.command)])
 
 
-def export_prov(trial: Trial, args, name="provo", format="provn"):
+def export_prov(trial: Trial, args, extension):
     document = provo.ProvDocument()
-    document.set_default_namespace("https://github.com/gems-uff/noworkflow")
+    document.set_default_namespace(args.defaultns)
 
     print_msg("Exporting provenance of trial {} in PROV-O format".format(trial.id), force=True)
     export_basic_info(trial, document)
@@ -43,9 +45,28 @@ def export_prov(trial: Trial, args, name="provo", format="provn"):
     if args.file_accesses:
         file_accesses.export(trial, document.bundle("trial{}FileAccesses".format(trial.id)))
 
-    print_msg("Persisting collected provenance to local storage")
-    with open(name + "." + format, 'w') as file:
-        document.serialize(destination=file, format=format)
-        provo_dot.prov_to_dot(document).write_pdf(name + ".pdf")
+    persist_document(document, args.filename, args.format, extension)
 
-    print_msg("Export to file \"{}\" done.".format(name + "." + format), force=True)
+
+def persist_document(document, name, format, extension):
+    print_msg("Persisting collected provenance to local storage")
+
+    filename = "{}{}".format(name, extension)
+    serializers = ["json", "rdf", "provn", "xml"]
+    writers = ["raw", "dot", "jpeg", "png", "svg", "pdf", "plain"]
+
+    if format in serializers:
+        print_msg("  Employing serializer to export to {}".format(format))
+        with open(filename, 'w') as file:
+            document.serialize(destination=file, format=format)
+
+    elif format in writers:
+        print_msg("  Employing dot writer to export to {}".format(format))
+        provo_dot.prov_to_dot(document).write(filename, format=format)
+
+    else:
+        print_msg("  Could not find suitable exporting module for {{name=\"{}\", format=\"{}\", extension=\"{}\"}}. "
+                  "Try different input parameters.".format(name, format, extension))
+        sys.exit(1)
+
+    print_msg("Provenance export to file \"{}\" done.".format(filename), force=True)

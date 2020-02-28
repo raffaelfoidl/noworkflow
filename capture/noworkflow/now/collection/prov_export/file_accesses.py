@@ -13,7 +13,11 @@ def export(trial: Trial, document: provo.ProvBundle):
                            (provo.PROV_TYPE, f_access.mode),
                            (provo.PROV_ATTR_TIME, f_access.timestamp),
                            ("buffering", f_access.buffering),
-                           ("functionActivationId", f_access.function_activation_id),  # Todo match
-                           ("caller", f_access.caller),  # todo match
                            ("contentHashBefore", f_access.content_hash_before),
                            ("contentHashAfter", f_access.content_hash_after)])
+
+        if document.get_record("functionActivation{}".format(f_access.function_activation_id)):
+            document.wasInformedBy("fileAccess{}".format(f_access.id),
+                                   "functionActivation{}".format(f_access.function_activation_id),
+                                   "fileAcc{}ByFuncAct{}".format(f_access.id, f_access.function_activation_id),
+                                   [(provo.PROV_TYPE, "fileAccess")])

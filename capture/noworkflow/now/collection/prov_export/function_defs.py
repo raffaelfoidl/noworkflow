@@ -24,8 +24,7 @@ def _call_usage_definitions(function, document):
         document.wasInformedBy("callDefinition{}".format(call.id),
                                "functionDefinition{}".format(function.id),
                                "funcDef{}CalledBy{}".format(function.id, call.id),
-                               [(provo.PROV_ROLE, "call"),
-                                (provo.PROV_TYPE, "callDefinition")])
+                               [(provo.PROV_TYPE, "callDefinition")])
 
 
 def _call_definitions(function, document):

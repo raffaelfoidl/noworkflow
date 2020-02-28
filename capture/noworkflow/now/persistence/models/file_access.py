@@ -83,20 +83,6 @@ class FileAccess(AlchemyProxy):
         return " -> ".join(stack)
 
     @property
-    def caller(self):
-        """Return the second-highest function on the activation stack since the beginning of execution"""
-        stack = []
-        activation = self.activation
-        while activation:
-            name = activation.name
-            activation = activation.caller
-            if activation:
-                stack.insert(0, name)
-        if not stack or stack[-1] != "open":
-            return "/"  # no direct caller function available
-        return stack[-2]
-
-    @property
     def brief(self):
         """Brief description of file access"""
         result = "({0.mode}) {0.name}".format(self)

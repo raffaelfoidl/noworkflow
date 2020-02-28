@@ -69,19 +69,18 @@ def _argument_activation(activation, document):
                            (provo.PROV_TYPE, "argumentActivation")])
 
 
-def _function_parent(activation, document):
+def _function_parent(activation: Activation, document):
     if activation.caller_id is not None:
         document.wasInformedBy("functionActivation{}".format(activation.id),
                                "functionActivation{}".format(activation.caller_id),
-                               "funcAct{}CalledBy{}".format(activation.id, activation.caller_id))
+                               "funcAct{}CalledBy{}".format(activation.id, activation.caller_id),
+                               [(provo.PROV_TYPE, "callActivation")])
 
 
-def _function_activation(activation, document):
+def _function_activation(activation: Activation, document):
     document.activity("functionActivation{}".format(activation.id),
                       activation.start,
                       activation.finish,
                       [(provo.PROV_LABEL, activation.name),
                        (provo.PROV_TYPE, "functionActivation"),
-                       ("line", activation.line),
-                       ("caller", "functionActivation{}".format(activation.caller_id)) if
-                       activation.caller_id is not None else (None, None)])
+                       ("line", activation.line)])

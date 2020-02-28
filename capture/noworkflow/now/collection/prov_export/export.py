@@ -4,29 +4,12 @@ import prov.model as provo
 import prov.dot as provo_dot
 
 from noworkflow.now.collection.prov_export import module_deps, function_defs, environment_attrs, \
-    function_activations, file_accesses
+    function_activations, file_accesses, basic_info
 from noworkflow.now.persistence.models import Trial
 from noworkflow.now.utils.io import print_msg
 
 
-def export_basic_info(trial: Trial, document: provo.ProvDocument):
-    print_msg("Exporting basic trial information")
-
-    document.collection("trial{}Prov".format(trial.id))
-
-    document.entity("trial{}Info".format(trial.id),
-                    [(provo.PROV_TYPE, "trial"),
-                     (provo.PROV_ATTR_STARTTIME, trial.start),
-                     (provo.PROV_ATTR_ENDTIME, trial.finish),
-                     ("codeHash", trial.code_hash),
-                     ("parentId", trial.parent_id),
-                     ("inheritedId", trial.inherited_id),
-                     ("command", trial.command)])
-
-    document.hadMember("trial{}Prov".format(trial.id), "trial{}Info".format(trial.id))
-
-
-def export_prov(trial: Trial, args, extension):
+def export_provo(trial: Trial, args, extension):
     document = provo.ProvDocument()
     document.set_default_namespace(args.defaultns)
     bundle_def = None
@@ -34,7 +17,8 @@ def export_prov(trial: Trial, args, extension):
     bundle_exec = None
 
     print_msg("Exporting provenance of trial {} in PROV-O format".format(trial.id), force=True)
-    export_basic_info(trial, document)
+    document.collection("trial{}Prov".format(trial.id), [(provo.PROV_LABEL, "provenance collected by noworfklow")])
+    basic_info.export(trial, document)
 
     if args.function_defs:
         bundle_def = document.bundle("trial{}DefinitionProv".format(trial.id)) if not bundle_def else bundle_def
@@ -58,15 +42,18 @@ def export_prov(trial: Trial, args, extension):
 
     if bundle_def:
         document.hadMember("trial{}Prov".format(trial.id), bundle_def.identifier)
+        document.wasGeneratedBy(bundle_def.identifier, "trial{}Execution".format(trial.id), None)
     if bundle_dep:
-        document.hadMember("trial{}Prov".format(trial.id), "trial{}DeploymentProv".format(trial.id))
+        document.hadMember("trial{}Prov".format(trial.id), bundle_dep.identifier)
+        document.wasGeneratedBy(bundle_dep.identifier, "trial{}Execution".format(trial.id), None)
     if bundle_exec:
-        document.hadMember("trial{}Prov".format(trial.id), "trial{}ExecutionProv".format(trial.id))
+        document.hadMember("trial{}Prov".format(trial.id), bundle_exec.identifier)
+        document.wasGeneratedBy(bundle_exec.identifier, "trial{}Execution".format(trial.id), None)
 
-    persist_document(document, args.filename, args.format, extension)
+    _persist_document(document, args.filename, args.format, extension)
 
 
-def persist_document(document, name, format, extension):
+def _persist_document(document, name, format, extension):
     print_msg("Persisting collected provenance to local storage")
 
     filename = "{}{}".format(name, extension)

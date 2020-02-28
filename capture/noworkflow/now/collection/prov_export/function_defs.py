@@ -23,7 +23,7 @@ def _call_usage_definitions(function, document):
     for call in function.function_calls:  # type: Object
         document.wasInformedBy("callDefinition{}".format(call.id),
                                "functionDefinition{}".format(function.id),
-                               "funcDef{}CalledBy{}".format(function.id, call.id),
+                               "callDef{}CalledByFuncDef{}".format(call.id, function.id),
                                [(provo.PROV_TYPE, "callDefinition")])
 
 

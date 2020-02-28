@@ -51,7 +51,7 @@ def export_provo(trial: Trial, args, extension):
         document.wasGeneratedBy(bundle_exec.identifier, "trial{}Execution".format(trial.id), None)
 
     _persist_document(document, args.filename, args.format, extension,
-                      args.hideelemattr, args.hiderelattr, args.graphdir)
+                      args.hide_elem_attr, args.hide_rel_attr, args.graph_dir)
 
 
 def _persist_document(document, name, format, extension, hide_elem_attr, hide_rel_attr, dir):

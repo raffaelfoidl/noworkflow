@@ -12,7 +12,7 @@ def export(trial: Trial, document: provo.ProvBundle):
     for env_attr in trial.environment_attrs:  # type: EnvironmentAttr
         document.entity("environmentAttribute{}".format(env_attr.id),
                         [(provo.PROV_LABEL, env_attr.name),
-                         (provo.PROV_VALUE, env_attr.value),
+                         (provo.PROV_VALUE, env_attr.value[:150] + ('..' if len(env_attr.value) > 150 else '')),
                          (provo.PROV_TYPE, "environmentAttribute")])
 
     for env_attr in trial.environment_attrs:  # type: EnvironmentAttr

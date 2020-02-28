@@ -52,11 +52,11 @@ class ProvO(Command):
         add_arg("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
                 help="set the default namespace for the exported prov-o file. "
                      "Default: https://github.com/gems-uff/noworkflow")
-        add_arg("--hideelemattr", action="store_true",
-                help="Hide element attributes in a graph to be rendered. Default: not hidden")
-        add_arg("--hiderelattr", action="store_true",
-                help="Hide relation attributes in a graph to be rendered. Default: not hidden")
-        add_arg("-g", "--graphdir", type=str, default="BT",
+        add_arg("--hide-elem-attr", action="store_true",
+                help="Hide element attributes in a graph to be rendered. Default: not hidden (= option not specified)")
+        add_arg("--hide-rel-attr", action="store_true",
+                help="Hide relation attributes in a graph to be rendered. Default: not hidden (= option not specified)")
+        add_arg("-g", "--graph-dir", type=str, default="BT",
                 help="Specify direction of a graph to be rendered. Allowed values: {BT, TB, LR, RL}. Default: BT")
         add_arg("-v", "--verbose", action="store_true",
                 help="increase output verbosity")
@@ -75,7 +75,7 @@ class ProvO(Command):
             args.filename = "trial{}".format(trial.id)
 
         args.recursion_depth = max(args.recursion_depth, 0)
-        self.validate_params(args.format, args.graphdir)
+        self.validate_params(args.format, args.graph_dir)
 
         io.verbose = args.verbose
         export_provo(trial, args, self.output_formats[args.format])

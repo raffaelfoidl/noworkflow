@@ -29,7 +29,7 @@ def _return_value(activation, document):
     if activation.return_value is not None and activation.return_value != "None":
         document.entity("funcAct{}ReturnValue".format(activation.id),
                         [(provo.PROV_VALUE,
-                          activation.return_value[:150] + ('..' if len(activation.return_value) > 150 else '')),
+                          activation.return_value[:150] + ('...' if len(activation.return_value) > 150 else '')),
                          (provo.PROV_TYPE, "returnValue")])
 
         document.wasGeneratedBy("funcAct{}ReturnValue".format(activation.id),
@@ -44,7 +44,7 @@ def _global_activation(activation, document):
         for glob in globs:  # type: ObjectValue
             document.entity("globalActivation{}".format(glob.id),
                             [(provo.PROV_LABEL, glob.name),
-                             (provo.PROV_VALUE, glob.value[:150] + ('..' if len(glob.value) > 150 else '')),
+                             (provo.PROV_VALUE, glob.value[:150] + ('...' if len(glob.value) > 150 else '')),
                              (provo.PROV_TYPE, "globalActivation")])
 
             document.used("functionActivation{}".format(glob.function_activation_id),
@@ -61,7 +61,7 @@ def _argument_activation(activation, document):
         for arg in args:  # type: ObjectValue
             document.entity("argumentActivation{}".format(arg.id),
                             [(provo.PROV_LABEL, arg.name),
-                             (provo.PROV_VALUE, arg.value[:150] + ('..' if len(arg.value) > 150 else '')),
+                             (provo.PROV_VALUE, arg.value[:150] + ('...' if len(arg.value) > 150 else '')),
                              (provo.PROV_TYPE, "argumentActivation")])
 
             document.used("functionActivation{}".format(arg.function_activation_id),

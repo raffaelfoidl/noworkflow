@@ -69,10 +69,13 @@ def _argument_definitions(function, document):
 
 
 def _function_definitions(document, function):
+    doc_string = function.docstring.strip()[:150].replace("\n", " ") + \
+                 ('...' if len(function.docstring.strip()) > 150 else '')
+
     document.activity("functionDefinition{}".format(function.id), None, None,
                       [(provo.PROV_LABEL, function.name),
                        (provo.PROV_TYPE, "functionDefinition"),
                        ("codeHash", function.code_hash),
                        ("firstLine", function.first_line),
                        ("lastLine", function.last_line),
-                       ("docString", function.docstring.strip() if len(function.docstring.strip()) > 0 else None)])
+                       ("docString", doc_string if len(function.docstring.strip()) > 0 else None)])

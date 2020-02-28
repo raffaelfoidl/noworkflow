@@ -29,6 +29,8 @@ def blur_image(img, sigma=3):
 
 
 def get_diff(img1, img2):
+    """Gets the absolute difference of each and every pixel between the two parameters img1 and img2, whereby
+    img1 denotes the image as it was given as input and img2 describes the one with a Gaussian blur applied to it"""
     if img1.shape != img2.shape:
         print("Error, images are not of same dimensions")
         exit(1)

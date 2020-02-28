@@ -1,50 +1,82 @@
 [
   {
-    "country": "Slovenia",
-    "classification": "Hurricane (level 12)",
+    "country_code": "JP",
+    "country": "Japan",
+    "city": "Tomobe",
     "rank": 1,
-    "city": "Mlaka pri Kranju",
-    "country_code": "SI",
-    "wind_speed": "129.4"
+    "wind_speed": "137.5",
+    "classification": "Hurricane (level 12)"
   },
   {
-    "country": "Uganda",
-    "classification": "Violent Storm (level 11)",
+    "country_code": "RU",
+    "country": "Russia",
+    "city": "Rayevskaya",
     "rank": 2,
-    "city": "Rubirizi",
-    "country_code": "UG",
-    "wind_speed": "113.6"
+    "wind_speed": "130.0",
+    "classification": "Hurricane (level 12)"
   },
   {
-    "country": "Iran",
-    "classification": "Strong or severe gale (level 9)",
+    "country_code": "AR",
+    "country": "Argentina",
+    "city": "R\u00edo Segundo",
     "rank": 3,
-    "city": "Aleshtar",
-    "country_code": "IR",
-    "wind_speed": "76.9"
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
   },
   {
-    "country": "Indonesia",
-    "classification": "Fresh breeze (level 5)",
+    "country_code": "CN",
+    "country": "China",
+    "city": "Qinhe",
     "rank": 4,
-    "city": "Ampelgading",
-    "country_code": "ID",
-    "wind_speed": "32.0"
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
   },
   {
-    "country": "Laos",
-    "classification": "Gentle breeze (level 3)",
+    "country_code": "SV",
+    "country": "El Salvador",
+    "city": "Victoria",
     "rank": 5,
-    "city": "Viangxai",
-    "country_code": "LA",
-    "wind_speed": "18.6"
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
   },
   {
-    "country": "Czech Republic",
-    "classification": "Gentle breeze (level 3)",
+    "country_code": "PL",
+    "country": "Poland",
+    "city": "P\u0119powo",
     "rank": 6,
-    "city": "Doloplazy",
-    "country_code": "CZ",
-    "wind_speed": "17.3"
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
+  },
+  {
+    "country_code": "RU",
+    "country": "Russia",
+    "city": "Pregradnaya",
+    "rank": 7,
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
+  },
+  {
+    "country_code": "RS",
+    "country": "Serbia",
+    "city": "Boljevci",
+    "rank": 8,
+    "wind_speed": "129.9",
+    "classification": "Hurricane (level 12)"
+  },
+  {
+    "country_code": "CN",
+    "country": "China",
+    "city": "Dalongzhan",
+    "rank": 9,
+    "wind_speed": "129.8",
+    "classification": "Hurricane (level 12)"
+  },
+  {
+    "country_code": "ID",
+    "country": "Indonesia",
+    "city": "Balakasap",
+    "rank": 10,
+    "wind_speed": "129.8",
+    "classification": "Hurricane (level 12)"
   }
 ]

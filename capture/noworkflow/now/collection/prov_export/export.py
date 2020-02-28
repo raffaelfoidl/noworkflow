@@ -34,7 +34,7 @@ def export_provo(trial: Trial, args, extension):
 
     if args.function_activations:
         bundle_exec = document.bundle("trial{}ExecutionProv".format(trial.id))
-        function_activations.export(trial, bundle_exec)
+        function_activations.export(trial, bundle_exec, args.recursion_depth)
 
     if args.file_accesses:
         bundle_exec = document.bundle("trial{}ExecutionProv".format(trial.id)) if not bundle_exec else bundle_exec

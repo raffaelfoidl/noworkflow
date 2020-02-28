@@ -40,6 +40,9 @@ class ProvO(Command):
                 help="shows function activations")
         add_arg("-f", "--file-accesses", action="store_true",
                 help="shows read/write access to files")
+        add_arg("-r", "--recursion-depth", type=int, default=0,
+                help="Sets the maximum recursion depth when analyzing function calls within function calls. Any value"
+                     "less than 1 results in no restriction (besides maximum stack size). Default: 0")
         add_arg("--filename", type=str,
                 help="Set the name or path of the prov-o file to export (without extension). "
                      "Default: <currDir>/trial<No.>")
@@ -71,6 +74,7 @@ class ProvO(Command):
         if args.filename is None:
             args.filename = "trial{}".format(trial.id)
 
+        args.recursion_depth = max(args.recursion_depth, 0)
         self.validate_params(args.format, args.graphdir)
 
         io.verbose = args.verbose

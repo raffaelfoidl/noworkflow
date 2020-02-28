@@ -4,23 +4,25 @@ from noworkflow.now.persistence.models import Trial, Activation, ObjectValue
 from noworkflow.now.utils.io import print_msg
 
 
-def export(trial: Trial, document: provo.ProvBundle):
+def export(trial: Trial, document: provo.ProvBundle, max_depth: int):
     print_msg("Exporting function activations")
 
     for act in trial.initial_activations:  # type: Activation
-        export_function_activation(trial, act, document)
+        export_function_activation(trial, act, document, max_depth=max_depth, level=1)
 
 
-def export_function_activation(trial: Trial, activation: Activation, document: provo.ProvBundle, level: int = 1):
-    _function_activation(activation, document)
+def export_function_activation(trial: Trial, activation: Activation, document: provo.ProvBundle, max_depth: int,
+                               level: int = 1):
+    _function_activation(activation, document, level)
     _function_parent(activation, document)
     _argument_activation(activation, document)
     _global_activation(activation, document)
     _return_value(activation, document)
 
-    # Print function activations recursively
-    for inner_activation in activation.children:
-        export_function_activation(trial, inner_activation, document, level + 1)
+    if max_depth == 0 or level < max_depth:
+        # Print function activations recursively
+        for inner_activation in activation.children:
+            export_function_activation(trial, inner_activation, document, max_depth, level + 1)
 
 
 def _return_value(activation, document):
@@ -77,10 +79,11 @@ def _function_parent(activation: Activation, document):
                                [(provo.PROV_TYPE, "callActivation")])
 
 
-def _function_activation(activation: Activation, document):
+def _function_activation(activation: Activation, document, depth):
     document.activity("functionActivation{}".format(activation.id),
                       activation.start,
                       activation.finish,
                       [(provo.PROV_LABEL, activation.name),
                        (provo.PROV_TYPE, "functionActivation"),
-                       ("line", activation.line)])
+                       ("line", activation.line),
+                       ("depth", depth)])

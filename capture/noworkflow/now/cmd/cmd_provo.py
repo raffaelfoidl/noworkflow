@@ -49,6 +49,12 @@ class ProvO(Command):
         add_arg("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
                 help="set the default namespace for the exported prov-o file. "
                      "Default: https://github.com/gems-uff/noworkflow")
+        add_arg("--hideelemattr", action="store_true",
+                help="Hide element attributes in a graph to be rendered. Default: not hidden")
+        add_arg("--hiderelattr", action="store_true",
+                help="Hide relation attributes in a graph to be rendered. Default: not hidden")
+        add_arg("-g", "--graphdir", type=str, default="BT",
+                help="Specify direction of a graph to be rendered. Allowed values: {BT, TB, LR, RL}. Default: BT")
         add_arg("-v", "--verbose", action="store_true",
                 help="increase output verbosity")
         add_arg("--dir", type=str,
@@ -65,12 +71,16 @@ class ProvO(Command):
         if args.filename is None:
             args.filename = "trial{}".format(trial.id)
 
-        self.validate_export_format(args.format)
+        self.validate_params(args.format, args.graphdir)
 
         io.verbose = args.verbose
         export_provo(trial, args, self.output_formats[args.format])
 
-    def validate_export_format(self, format: str):
+    def validate_params(self, format: str, graph_dir: str):
         if self.output_formats.get(format) is None:
             print_msg("Invalid export format \"{}\". Please consult \"now provo -h\".".format(format), True)
+            sys.exit(1)
+
+        if graph_dir.upper() not in ["BT", "TB", "LR", "RL"]:
+            print_msg("Invalid graph direction \"{}\". Please consult \"now provo -h\".".format(graph_dir), True)
             sys.exit(1)

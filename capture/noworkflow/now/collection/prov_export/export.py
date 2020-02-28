@@ -50,10 +50,11 @@ def export_provo(trial: Trial, args, extension):
         document.hadMember("trial{}Prov".format(trial.id), bundle_exec.identifier)
         document.wasGeneratedBy(bundle_exec.identifier, "trial{}Execution".format(trial.id), None)
 
-    _persist_document(document, args.filename, args.format, extension)
+    _persist_document(document, args.filename, args.format, extension,
+                      args.hideelemattr, args.hiderelattr, args.graphdir)
 
 
-def _persist_document(document, name, format, extension):
+def _persist_document(document, name, format, extension, hide_elem_attr, hide_rel_attr, dir):
     print_msg("Persisting collected provenance to local storage")
 
     filename = "{}{}".format(name, extension)
@@ -67,7 +68,8 @@ def _persist_document(document, name, format, extension):
 
     elif format in writers:
         print_msg("  Employing dot writer to export to {}".format(format))
-        provo_dot.prov_to_dot(document).write(filename, format=format)
+        provo_dot.prov_to_dot(document, show_element_attributes=not hide_elem_attr, direction=dir,
+                              show_relation_attributes=not hide_rel_attr).write(filename, format=format)
 
     else:
         print_msg("  Could not find suitable exporting module for {{name=\"{}\", format=\"{}\", extension=\"{}\"}}. "

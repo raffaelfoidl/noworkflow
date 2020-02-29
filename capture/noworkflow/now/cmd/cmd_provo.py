@@ -10,7 +10,7 @@ import os
 import sys
 from collections import OrderedDict
 
-from ..collection.prov_export.export import export_provo
+from noworkflow.now.persistence.provo.export import export_writer
 from ..persistence.models import Trial
 from ..persistence import persistence_config
 from ..utils import io
@@ -78,7 +78,7 @@ class ProvO(Command):
         self.validate_params(args.format, args.graph_dir)
 
         io.verbose = args.verbose
-        export_provo(trial, args, self.output_formats[args.format])
+        export_writer.export_provo(trial, args, self.output_formats[args.format])
 
     def validate_params(self, format: str, graph_dir: str):
         if self.output_formats.get(format) is None:

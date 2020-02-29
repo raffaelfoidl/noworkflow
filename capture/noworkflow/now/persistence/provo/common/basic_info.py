@@ -1,14 +1,25 @@
-import prov.model as provo
-from noworkflow.now.persistence.models import Trial
+from prov import model as provo
+
+from noworkflow.now.persistence.models import Trial, Diff as DiffModel
 from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvDocument):
     print_msg("Exporting basic trial information")
-    create_trial_info(document, trial)
+    _create_trial_info(document, trial)
 
 
-def create_trial_info(document: provo.ProvDocument, trial: Trial, suffix=""):
+def diff(diff: DiffModel, document: provo.ProvDocument):
+    _create_trial_info(document, diff.trial1, "_{}".format(diff.trial1.id))
+    _create_trial_info(document, diff.trial2, "_{}".format(diff.trial2.id))
+
+    document.wasInfluencedBy("trial{}Execution".format(diff.trial2.id),
+                             "trial{}Execution".format(diff.trial1.id),
+                             "trial{}ComparedTo{}".format(diff.trial2.id, diff.trial1.id),
+                             [(provo.PROV_TYPE, "comparison")])
+
+
+def _create_trial_info(document: provo.ProvDocument, trial: Trial, suffix=""):
     document.agent("{}{}".format(trial.script, suffix),
                    [(provo.PROV_TYPE, provo.PROV["SoftwareAgent"]),
                     ("codeHash", trial.code_hash),

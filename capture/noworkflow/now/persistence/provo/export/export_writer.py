@@ -3,8 +3,8 @@ import sys
 import prov.model as provo
 import prov.dot as provo_dot
 
-from noworkflow.now.collection.prov_export import module_deps, function_defs, environment_attrs, \
-    function_activations, file_accesses, basic_info
+from noworkflow.now.persistence.provo.export import function_activations, function_defs
+from noworkflow.now.persistence.provo.common import environment_attrs, file_accesses, module_deps, basic_info
 from noworkflow.now.persistence.models import Trial
 from noworkflow.now.utils.io import print_msg
 

@@ -18,18 +18,19 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
+    print_msg("Exporting environment conditions comparison")
     added, removed, replaced = diff.environment
 
     for env_attr in added:  # type: EnvironmentAttr
-        _create_env_attr(document, env_attr)
-        document.wasGeneratedBy("environmentAttribute{}".format(env_attr.id),
+        _create_env_attr(document, env_attr, suffix="_a")
+        document.wasGeneratedBy("environmentAttribute{}_a".format(env_attr.id),
                                 "trial{}Execution".format(diff.trial2.id), None,
                                 "environmentAttribute{}AddAttr".format(env_attr.id),
                                 [(provo.PROV_ROLE, "environmentAttributeAddition")])
 
     for env_attr in removed:  # type: EnvironmentAttr
-        _create_env_attr(document, env_attr)
-        document.wasInvalidatedBy("environmentAttribute{}".format(env_attr.id),
+        _create_env_attr(document, env_attr, suffix="_r")
+        document.wasInvalidatedBy("environmentAttribute{}_r".format(env_attr.id),
                                   "trial{}Execution".format(diff.trial2.id), None,
                                   "environmentAttribute{}RemoveAttr".format(env_attr.id),
                                   [(provo.PROV_ROLE, "environmentAttributeRemoval")])

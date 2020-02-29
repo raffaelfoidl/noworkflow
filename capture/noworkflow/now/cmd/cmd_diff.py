@@ -13,6 +13,7 @@ from future.utils import viewitems, viewkeys
 from ..ipython.converter import create_ipynb
 from ..persistence.models.diff import Diff as DiffModel
 from ..persistence import persistence_config
+from ..utils import io
 from ..utils.io import print_msg
 from ..utils.cross_version import zip_longest
 
@@ -181,6 +182,8 @@ class Diff(NotebookCommand):
         add_arg("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
                 help="set the default namespace for the exported prov-o file. "
                      "Default: https://github.com/gems-uff/noworkflow")
+        add_arg("-v", "--verbose", action="store_true",
+                help="increase output verbosity")
         add_arg("--dir", type=str,
                 help="set project path where is the database. Default to "
                      "current directory")
@@ -201,10 +204,13 @@ class Diff(NotebookCommand):
 
         diff = DiffModel(args.trial1, args.trial2)
 
+        io.verbose = args.verbose
         if not args.provo:
             print_diff(access_extra, args, diff, skip_in_trial)
         else:
             diff_writer.export_diff(diff, args)
+
+        print_msg("Comparison provenance export to file \"{}\" done.".format("tba"), force=True)
 
     def execute_export(self, args):
         persistence_config.content_engine = args.content_engine

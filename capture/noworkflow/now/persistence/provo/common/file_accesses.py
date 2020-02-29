@@ -18,6 +18,7 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
+    print_msg("Exporting file accesses comparison")
     added, removed, replaced = diff.file_accesses
 
     for f_access in added:  # type: FileAccess

@@ -18,18 +18,19 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
+    print_msg("Exporting module dependency comparison")
     added, removed, replaced = diff.modules
 
     for module in added:  # type: Module
-        _create_module_dep(module, document)
-        document.wasGeneratedBy("module{}".format(module.id),
+        _create_module_dep(module, document, suffix="_a")
+        document.wasGeneratedBy("module{}_a".format(module.id),
                                 "trial{}Execution".format(diff.trial2.id), None,
                                 "module{}AddDep".format(module.id),
                                 [(provo.PROV_ROLE, "dependencyAddition")])
 
     for module in removed:  # type: Module
-        _create_module_dep(module, document)
-        document.wasInvalidatedBy("module{}".format(module.id),
+        _create_module_dep(module, document, suffix="_r")
+        document.wasInvalidatedBy("module{}_r".format(module.id),
                                   "trial{}Execution".format(diff.trial2.id), None,
                                   "module{}RemoveDep".format(module.id),
                                   [(provo.PROV_ROLE, "dependencyRemoval")])

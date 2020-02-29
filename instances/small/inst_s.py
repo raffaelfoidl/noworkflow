@@ -6,6 +6,7 @@ import csv
 import locale
 from typing import List, NamedTuple, Tuple, Iterator, Any
 import argparse
+import PIL
 
 root, filename = os.path.split(__file__)
 by_country_path = os.path.join(root, "by_country.json")

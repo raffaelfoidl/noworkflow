@@ -1,11 +1,15 @@
 document
   default <https://github.com/gems-uff/noworkflow>
   
-  agent(inst_s.py_1, [script="inst_s.py", codeHash="36ab365241dd2b2269eb84c5a2b28b157d7fb208", id=1, prov:type='prov:SoftwareAgent'])
+  agent(inst_s.py_7, [prov:type='prov:SoftwareAgent', codeHash="3fa15a6f6c9e78302b80729cd100f677c05bddce", id=7, script="inst_s.py"])
+  activity(trial7Execution, 2020-02-29T11:00:29.451511, 2020-02-29T11:00:33.061984, [parentId=6, nowCommand="run -v inst_s.py data_small.csv"])
+  wasAssociatedWith(trial7ExecutionByScript; trial7Execution, inst_s.py_7, -)
+  agent(inst_s.py_1, [prov:type='prov:SoftwareAgent', codeHash="36ab365241dd2b2269eb84c5a2b28b157d7fb208", id=1, script="inst_s.py"])
   activity(trial1Execution, 2020-02-28T19:54:46.434460, 2020-02-28T19:54:49.953933, [nowCommand="run inst_s.py data.csv"])
   wasAssociatedWith(trial1ExecutionByScript; trial1Execution, inst_s.py_1, -)
-  agent(inst_s.py_4, [script="inst_s.py", codeHash="e1feb1e55e32049d7bbdd43e2f038674241430cd", id=4, prov:type='prov:SoftwareAgent'])
-  activity(trial4Execution, 2020-02-29T10:17:09.764392, 2020-02-29T10:17:13.338197, [parentId=3, nowCommand="run -v inst_s.py data_small.csv"])
-  wasAssociatedWith(trial4ExecutionByScript; trial4Execution, inst_s.py_4, -)
-  wasInfluencedBy(trial4After1; trial4Execution, trial1Execution, [prov:type="successor"])
+  wasInfluencedBy(trial1ComparedTo7; trial1Execution, trial7Execution, [prov:type="comparison"])
+  entity(module1983, [prov:type="moduleDependency", codeHash="df16dce6036884b690cf10ccd102496f5b838327", version="6.2.2", prov:label="PIL._version", prov:location="/mnt/2A96E79A96E764B3/Universitaet/Bachelorarbeit/Repos/noworkflow/venv/lib/python3.5/site-packages/PIL/_version.py"])
+  wasInvalidatedBy(module1983RemoveDep; module1983, trial1Execution, -, [prov:role="dependencyRemoval"])
+  entity(module1609, [prov:type="moduleDependency", codeHash="59eccc9b5aa634940d35bd2d89ec78e4391279d7", version="6.2.2", prov:label="PIL", prov:location="/mnt/2A96E79A96E764B3/Universitaet/Bachelorarbeit/Repos/noworkflow/venv/lib/python3.5/site-packages/PIL/__init__.py"])
+  wasInvalidatedBy(module1609RemoveDep; module1609, trial1Execution, -, [prov:role="dependencyRemoval"])
 endDocument

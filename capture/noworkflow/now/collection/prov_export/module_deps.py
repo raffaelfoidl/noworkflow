@@ -4,8 +4,8 @@ from noworkflow.now.utils.io import print_msg
 import prov.model as provo
 
 
-def create_module_dep(module: Module, document: provo.ProvBundle):
-    document.entity("module{}".format(module.id),
+def create_module_dep(module: Module, document: provo.ProvBundle, suffix=""):
+    document.entity("module{}{}".format(module.id, suffix),
                     [(provo.PROV_LABEL, module.name),
                      (provo.PROV_TYPE, "moduleDependency"),
                      ("version", module.version),

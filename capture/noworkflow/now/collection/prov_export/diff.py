@@ -25,12 +25,23 @@ def module_changes(diff: DiffModel, document: provo.ProvDocument):
                                   "module{}RemoveDep".format(module.id),
                                   [(provo.PROV_ROLE, "dependencyRemoval")])
 
-    for module in replaced:  # type: Module
-        create_module_dep(module, document)
-        document.wasGeneratedBy("module{}".format(module.id),
+    for (mod_removed, mod_added) in replaced:  # type: Module
+        create_module_dep(mod_added, document, suffix="_a")
+        document.wasGeneratedBy("module{}_a".format(mod_added.id),
                                 "trial{}Execution".format(diff.trial2.id), None,
-                                "module{}ReplaceDep".format(module.id),
-                                [(provo.PROV_ROLE, "dependencyReplacement")])
+                                "module{}AddDep".format(mod_added.id),
+                                [(provo.PROV_ROLE, "dependencyAddition")])
+
+        create_module_dep(mod_removed, document, suffix="_r")
+        document.wasInvalidatedBy("module{}_r".format(mod_removed.id),
+                                  "trial{}Execution".format(diff.trial2.id), None,
+                                  "module{}RemoveDep".format(mod_removed.id),
+                                  [(provo.PROV_ROLE, "dependencyRemoval")])
+
+        document.wasRevisionOf("module{}_a".format(mod_added.id),
+                               "module{}_r".format(mod_removed.id),
+                               "trial{}Execution".format(diff.trial2.id), None, None, None,
+                               [(provo.PROV_ROLE, "dependencyReplacement")])
 
 
 def environment_attr_changes(diff: DiffModel, document: provo.ProvDocument):

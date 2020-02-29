@@ -1,6 +1,7 @@
 import prov.model as provo
 
 from noworkflow.now.persistence.models import Trial, Object, FunctionDef
+from noworkflow.now.utils.functions import truncate
 from noworkflow.now.utils.io import print_msg
 
 
@@ -69,8 +70,7 @@ def _argument_definitions(function, document):
 
 
 def _function_definitions(document, function):
-    doc_string = function.docstring.strip()[:150].replace("\n", " ") + \
-                 ('...' if len(function.docstring.strip()) > 150 else '')
+    doc_string = truncate(function.docstring.strip().replace("\n", " "))
 
     document.activity("functionDefinition{}".format(function.id), None, None,
                       [(provo.PROV_LABEL, function.name),

@@ -1,9 +1,11 @@
 import prov.model as provo
 import prov.dot as provo_dot
 
+from noworkflow.now.collection.prov_export.basic_info import create_trial_info
 from noworkflow.now.collection.prov_export.environment_attrs import create_env_attr
+from noworkflow.now.collection.prov_export.file_accesses import create_file_access
 from noworkflow.now.collection.prov_export.module_deps import create_module_dep
-from noworkflow.now.persistence.models import Trial, Module, EnvironmentAttr
+from noworkflow.now.persistence.models import Trial, Module, EnvironmentAttr, FileAccess
 from noworkflow.now.persistence.models.diff import Diff as DiffModel
 from noworkflow.now.utils.io import print_msg
 
@@ -80,6 +82,42 @@ def environment_attr_changes(diff: DiffModel, document: provo.ProvDocument):
                                [(provo.PROV_ROLE, "environmentAttributeReplacement")])
 
 
+def file_access_changes(diff: DiffModel, document: provo.ProvDocument):
+    added, removed, replaced = diff.file_accesses
+
+    for f_access in added:  # type: FileAccess
+        create_file_access(document, f_access, suffix="_a")
+        document.wasInformedBy("fileAccess{}_a".format(f_access.id),
+                               "trial{}Execution".format(diff.trial2.id),
+                               "fileAcc{}AddAcc".format(f_access.id),
+                               [(provo.PROV_TYPE, "fileAccessAddition")])
+
+    for f_access in removed:  # type: FileAccess
+        create_file_access(document, f_access, suffix="_r")
+        document.wasInformedBy("fileAccess{}_r".format(f_access.id),
+                               "trial{}Execution".format(diff.trial2.id),
+                               "fileAcc{}RemoveAcc".format(f_access.id),
+                               [(provo.PROV_TYPE, "fileAccessRemoval")])
+
+    for (f_removed, f_added) in replaced:  # type: FileAccess
+        create_file_access(document, f_added, suffix="_a")
+        document.wasInformedBy("fileAccess{}_a".format(f_added.id),
+                               "trial{}Execution".format(diff.trial2.id),
+                               "fileAcc{}AddAcc".format(f_added.id),
+                               [(provo.PROV_TYPE, "fileAccessAddition")])
+
+        create_file_access(document, f_removed, suffix="_r")
+        document.wasInformedBy("fileAccess{}_r".format(f_removed.id),
+                               "trial{}Execution".format(diff.trial2.id),
+                               "fileAcc{}RemoveAcc".format(f_removed.id),
+                               [(provo.PROV_TYPE, "fileAccessRemoval")])
+
+        document.wasInformedBy("fileAccess{}_a".format(f_added.id),
+                               "fileAccess{}_r".format(f_removed.id),
+                               "fileAcc{}ReplacesAcc{}".format(f_added.id, f_removed.id),
+                               [(provo.PROV_TYPE, "fileAccessReplacement")])
+
+
 def export_diff(diff: DiffModel, args):
     document = provo.ProvDocument()
     document.set_default_namespace(args.defaultns)
@@ -94,6 +132,9 @@ def export_diff(diff: DiffModel, args):
 
     if args.environment:
         environment_attr_changes(diff, document)
+
+    if args.file_accesses:
+        file_access_changes(diff, document)
 
     with open("hello.pn", "w") as file:
         document.serialize(destination=file, format="provn")
@@ -111,17 +152,4 @@ def basic_info(diff: DiffModel, document: provo.ProvDocument):
 
 
 def trial_info(trial: Trial, document: provo.ProvDocument):
-    document.agent("{}_{}".format(trial.script, trial.id),
-                   [(provo.PROV_TYPE, provo.PROV["SoftwareAgent"]),
-                    ("codeHash", trial.code_hash),
-                    ("script", trial.script),
-                    ("id", trial.id)])
-
-    document.activity("trial{}Execution".format(trial.id), trial.start, trial.finish,
-                      [("nowCommand", trial.command),
-                       ("parentId", trial.parent_id),
-                       ("inheritedId", trial.inherited_id)])
-
-    document.wasAssociatedWith("trial{}Execution".format(trial.id),
-                               "{}_{}".format(trial.script, trial.id), None,
-                               "trial{}ExecutionByScript".format(trial.id))
+    create_trial_info(document, trial, "_{}".format(trial.id))

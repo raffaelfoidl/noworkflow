@@ -9,7 +9,8 @@ def create_env_attr(document: provo.ProvBundle, env_attr: EnvironmentAttr, suffi
     document.entity("environmentAttribute{}{}".format(env_attr.id, suffix),
                     [(provo.PROV_LABEL, env_attr.name),
                      (provo.PROV_VALUE, truncate(env_attr.value)),
-                     (provo.PROV_TYPE, "environmentAttribute")])
+                     (provo.PROV_TYPE, "environmentAttribute"),
+                     ("id", env_attr.id) if suffix else (None, None)])
 
 
 def export(trial: Trial, document: provo.ProvBundle):

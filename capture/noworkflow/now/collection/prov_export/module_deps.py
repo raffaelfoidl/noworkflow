@@ -10,7 +10,8 @@ def create_module_dep(module: Module, document: provo.ProvBundle, suffix=""):
                      (provo.PROV_TYPE, "moduleDependency"),
                      ("version", module.version),
                      (provo.PROV_LOCATION, truncate(module.path)),
-                     ("codeHash", module.code_hash)])
+                     ("codeHash", module.code_hash),
+                     ("id", module.id) if suffix else (None, None)])
 
 
 def export(trial: Trial, document: provo.ProvBundle):

@@ -6,7 +6,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle, max_depth: int):
-    print_msg("Exporting function activations")
+    print_msg("  Exporting function activations")
 
     for act in trial.initial_activations:  # type: Activation
         export_function_activation(trial, act, document, max_depth=max_depth, level=1)

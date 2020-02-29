@@ -6,7 +6,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting environment conditions")
+    print_msg("  Exporting environment conditions")
 
     collection = document.collection("environmentAttributes")
 
@@ -18,7 +18,7 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
-    print_msg("Exporting environment conditions comparison")
+    print_msg("  Exporting environment conditions comparison")
     added, removed, replaced = diff.environment
 
     for env_attr in added:  # type: EnvironmentAttr
@@ -51,7 +51,7 @@ def diff(diff: DiffModel, document: provo.ProvDocument):
         document.wasRevisionOf("environmentAttribute{}_a".format(attr_added.id),
                                "environmentAttribute{}_r".format(attr_removed.id),
                                "trial{}Execution".format(diff.trial2.id), None, None, None,
-                               [(provo.PROV_ROLE, "environmentAttributeReplacement")])
+                               [(provo.PROV_TYPE, "environmentAttributeReplacement")])
 
 
 def _create_env_attr(document: provo.ProvBundle, env_attr: EnvironmentAttr, suffix=""):

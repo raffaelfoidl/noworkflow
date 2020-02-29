@@ -7,6 +7,7 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
 import os
+from collections import OrderedDict
 
 from future.utils import viewitems, viewkeys
 
@@ -18,7 +19,7 @@ from ..utils.io import print_msg
 from ..utils.cross_version import zip_longest
 
 from .cmd_show import print_trial_relationship
-from .command import NotebookCommand
+from .command import NotebookCommand, ProvOCommand
 
 import noworkflow.now.persistence.provo.diff.diff_writer as diff_writer
 
@@ -158,8 +159,12 @@ def print_diff(access_extra, args, diff, skip_in_trial):
                 names={"stack": "Function"})
 
 
-class Diff(NotebookCommand):
+class Diff(NotebookCommand, ProvOCommand):
     """Compare the collected provenance of two trials"""
+
+    output_formats = OrderedDict(
+        [("provn", ".pn"), ("xml", ".xml"), ("rdf", ".rdf"), ("json", ".json"), ("pdf", ".pdf"), ("svg", ".svg"),
+         ("dot", ".gv"), ("png", ".png"), ("jpeg", ".jpeg")])
 
     def add_arguments(self):
         add_arg = self.add_argument
@@ -179,9 +184,7 @@ class Diff(NotebookCommand):
                 help="display a concise version of diff (does not apply to -p option)")
         add_arg("-p", "--provo", action="store_true",
                 help="export comparison as prov-o document; suppresses console output")
-        add_arg("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
-                help="set the default namespace for the exported prov-o file. "
-                     "Default: https://github.com/gems-uff/noworkflow")
+        self.add_provo_export_args()
         add_arg("-v", "--verbose", action="store_true",
                 help="increase output verbosity")
         add_arg("--dir", type=str,
@@ -208,9 +211,11 @@ class Diff(NotebookCommand):
         if not args.provo:
             print_diff(access_extra, args, diff, skip_in_trial)
         else:
-            diff_writer.export_diff(diff, args)
+            if args.file is None:
+                args.file = "trialComparison{}_{}".format(diff.trial1.id, diff.trial2.id)
 
-        print_msg("Comparison provenance export to file \"{}\" done.".format("tba"), force=True)
+            self.validate_export_params(args.format, args.graph_dir)
+            diff_writer.export_diff(diff, args, self.get_extension(args.format))
 
     def execute_export(self, args):
         persistence_config.content_engine = args.content_engine

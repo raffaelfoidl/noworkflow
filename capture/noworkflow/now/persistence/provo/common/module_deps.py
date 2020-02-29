@@ -6,7 +6,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting module dependencies")
+    print_msg("  Exporting module dependencies")
 
     collection = document.collection("moduleDependencies")
 
@@ -18,7 +18,7 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
-    print_msg("Exporting module dependency comparison")
+    print_msg("  Exporting module dependency comparison")
     added, removed, replaced = diff.modules
 
     for module in added:  # type: Module
@@ -51,7 +51,7 @@ def diff(diff: DiffModel, document: provo.ProvDocument):
         document.wasRevisionOf("module{}_a".format(mod_added.id),
                                "module{}_r".format(mod_removed.id),
                                "trial{}Execution".format(diff.trial2.id), None, None, None,
-                               [(provo.PROV_ROLE, "dependencyReplacement")])
+                               [(provo.PROV_TYPE, "dependencyReplacement")])
 
 
 def _create_module_dep(module: Module, document: provo.ProvBundle, suffix=""):

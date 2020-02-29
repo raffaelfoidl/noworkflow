@@ -5,12 +5,12 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvDocument):
-    print_msg("Exporting basic trial information")
+    print_msg("  Exporting basic trial information")
     _create_trial_info(document, trial)
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
-    print_msg("Exporting basic trial comparison information")
+    print_msg("  Exporting basic trial comparison information")
     _create_trial_info(document, diff.trial1, "_{}".format(diff.trial1.id))
     _create_trial_info(document, diff.trial2, "_{}".format(diff.trial2.id))
 

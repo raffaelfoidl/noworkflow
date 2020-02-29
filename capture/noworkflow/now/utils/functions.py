@@ -19,7 +19,10 @@ MODULE = MODULE[:MODULE.rfind(".")]
 NOWORKFLOW_DIR = dirname(dirname(dirname(__file__)))
 
 
-def truncate(input: str, ellipsis: str = "...", max_length: int = 150) -> str:
+def truncate(input: str, ellipsis: str = "...", max_length: int = 150):
+    if input is None:
+        return None
+
     half_len = max_length // 2
     return input[:half_len] + (ellipsis + input[-half_len:] if len(input) > max_length else input[half_len:])
 

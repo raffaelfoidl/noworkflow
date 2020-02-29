@@ -5,7 +5,7 @@ from noworkflow.now.utils.io import print_msg
 
 
 def export(trial: Trial, document: provo.ProvBundle):
-    print_msg("Exporting file accesses")
+    print_msg("  Exporting file accesses")
 
     for f_access in trial.file_accesses:  # type: FileAccess
         _create_file_access(document, f_access)
@@ -18,7 +18,7 @@ def export(trial: Trial, document: provo.ProvBundle):
 
 
 def diff(diff: DiffModel, document: provo.ProvDocument):
-    print_msg("Exporting file accesses comparison")
+    print_msg("  Exporting file accesses comparison")
     added, removed, replaced = diff.file_accesses
 
     for f_access in added:  # type: FileAccess

@@ -1,8 +1,6 @@
-import sys
-
 import prov.model as provo
-import prov.dot as provo_dot
 
+from noworkflow.now.persistence.provo.common.file_writer import persist_document
 from noworkflow.now.persistence.provo.export import function_activations, function_defs
 from noworkflow.now.persistence.provo.common import environment_attrs, file_accesses, module_deps, basic_info
 from noworkflow.now.persistence.models import Trial
@@ -50,30 +48,5 @@ def export_provo(trial: Trial, args, extension):
         document.hadMember("trial{}Prov".format(trial.id), bundle_exec.identifier)
         document.wasGeneratedBy(bundle_exec.identifier, "trial{}Execution".format(trial.id), None)
 
-    _persist_document(document, args.filename, args.format, extension,
-                      args.hide_elem_attr, args.hide_rel_attr, args.graph_dir)
-
-
-def _persist_document(document, name, format, extension, hide_elem_attr, hide_rel_attr, dir):
-    print_msg("Persisting collected provenance to local storage")
-
-    filename = "{}{}".format(name, extension)
-    serializers = ["json", "rdf", "provn", "xml"]
-    writers = ["raw", "dot", "jpeg", "png", "svg", "pdf", "plain"]
-
-    if format in serializers:
-        print_msg("  Employing serializer to export to {}".format(format))
-        with open(filename, 'w') as file:
-            document.serialize(destination=file, format=format)
-
-    elif format in writers:
-        print_msg("  Employing dot writer to export to {}".format(format))
-        provo_dot.prov_to_dot(document, show_element_attributes=not hide_elem_attr, direction=dir,
-                              show_relation_attributes=not hide_rel_attr).write(filename, format=format)
-
-    else:
-        print_msg("  Could not find suitable exporting module for {{name=\"{}\", format=\"{}\", extension=\"{}\"}}. "
-                  "Try different input parameters.".format(name, format, extension))
-        sys.exit(1)
-
-    print_msg("Provenance export to file \"{}\" done.".format(filename), force=True)
+    persist_document(document, args.file, args.format, extension,
+                     args.hide_elem_attr, args.hide_rel_attr, args.graph_dir)

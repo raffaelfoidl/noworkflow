@@ -19,6 +19,8 @@ from ..utils.cross_version import zip_longest
 from .cmd_show import print_trial_relationship
 from .command import NotebookCommand
 
+import noworkflow.now.collection.prov_export.diff as diff_writer
+
 
 def print_diff_trials(diff, skip=None):
     """Print diff of basic trial information"""
@@ -104,9 +106,14 @@ class Diff(NotebookCommand):
         add_arg("-f", "--file-accesses", action="store_true",
                 help="compare read/write access to files")
         add_arg("-t", "--hide-timestamps", action="store_true",
-                help="hide timestamps")
+                help="hide timestamps (does not apply to -p option)")
         add_arg("--brief", action="store_true",
-                help="display a concise version of diff")
+                help="display a concise version of diff (does not apply to -p option)")
+        add_arg("-p", "--provo", action="store_true",
+                help="export comparison as prov-o document; suppresses console output")
+        add_arg("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
+                help="set the default namespace for the exported prov-o file. "
+                     "Default: https://github.com/gems-uff/noworkflow")
         add_arg("--dir", type=str,
                 help="set project path where is the database. Default to "
                      "current directory")
@@ -196,7 +203,8 @@ class Diff(NotebookCommand):
                     ignore=("id", "trial_id", "function_activation_id"),
                     names={"stack": "Function"})
 
-
+        if args.provo:
+            diff_writer.export_diff(diff, args)
 
     def execute_export(self, args):
         persistence_config.content_engine = args.content_engine

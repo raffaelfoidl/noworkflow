@@ -8,7 +8,8 @@ def export(trial: Trial, document: provo.ProvDocument):
 
     document.agent(trial.script,
                    [(provo.PROV_TYPE, provo.PROV["SoftwareAgent"]),
-                    ("codeHash", trial.code_hash)])
+                    ("codeHash", trial.code_hash),
+                    ("id", trial.id)])
 
     document.activity("trial{}Execution".format(trial.id), trial.start, trial.finish,
                       [("nowCommand", trial.command),

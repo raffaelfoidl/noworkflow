@@ -1,192 +1,80 @@
 [
   {
-    "avg_wind_speed": 124.94999999999999,
-    "country_code": "LC",
-    "country": "Saint Lucia",
-    "entries": [
-      {
-        "speed": "125.6",
-        "city": "Soufri\u00e8re"
-      },
-      {
-        "speed": "124.3",
-        "city": "Micoud"
-      }
-    ],
+    "classification": "Hurricane (level 12)",
+    "avg_wind_speed": 129.4,
     "rank": 1,
-    "classification": "Hurricane (level 12)"
-  },
-  {
-    "avg_wind_speed": 120.65,
-    "country_code": "RE",
-    "country": "Reunion",
     "entries": [
       {
-        "speed": "121.0",
-        "city": "Saint-Denis"
-      },
-      {
-        "speed": "127.5",
-        "city": "Saint-Denis"
-      },
-      {
-        "speed": "118.8",
-        "city": "Le Port"
-      },
-      {
-        "speed": "115.3",
-        "city": "Saint-Denis"
+        "speed": "129.4",
+        "city": "Mlaka pri Kranju"
       }
     ],
+    "country": "Slovenia",
+    "country_code": "SI"
+  },
+  {
+    "classification": "Violent Storm (level 11)",
+    "avg_wind_speed": 113.6,
     "rank": 2,
-    "classification": "Hurricane (level 12)"
-  },
-  {
-    "avg_wind_speed": 117.3,
-    "country_code": "SM",
-    "country": "San Marino",
     "entries": [
       {
-        "speed": "117.3",
-        "city": "Serravalle"
+        "speed": "113.6",
+        "city": "Rubirizi"
       }
     ],
+    "country": "Uganda",
+    "country_code": "UG"
+  },
+  {
+    "classification": "Strong or severe gale (level 9)",
+    "avg_wind_speed": 76.9,
     "rank": 3,
-    "classification": "Violent Storm (level 11)"
-  },
-  {
-    "avg_wind_speed": 114.4,
-    "country_code": "VC",
-    "country": "Saint Vincent and the Grenadines",
     "entries": [
       {
-        "speed": "114.4",
-        "city": "Byera Village"
+        "speed": "76.9",
+        "city": "Aleshtar"
       }
     ],
+    "country": "Iran",
+    "country_code": "IR"
+  },
+  {
+    "classification": "Fresh breeze (level 5)",
+    "avg_wind_speed": 32.0,
     "rank": 4,
-    "classification": "Violent Storm (level 11)"
-  },
-  {
-    "avg_wind_speed": 111.69999999999999,
-    "country_code": "WS",
-    "country": "Samoa",
     "entries": [
       {
-        "speed": "119.8",
-        "city": "Malie"
-      },
-      {
-        "speed": "103.6",
-        "city": "Nofoali\u2018i"
+        "speed": "32.0",
+        "city": "Ampelgading"
       }
     ],
+    "country": "Indonesia",
+    "country_code": "ID"
+  },
+  {
+    "classification": "Gentle breeze (level 3)",
+    "avg_wind_speed": 18.6,
     "rank": 5,
-    "classification": "Violent Storm (level 11)"
-  },
-  {
-    "avg_wind_speed": 109.64999999999999,
-    "country_code": "MT",
-    "country": "Malta",
     "entries": [
       {
-        "speed": "124.0",
-        "city": "Saint Lucia"
-      },
-      {
-        "speed": "91.0",
-        "city": "Sliema"
-      },
-      {
-        "speed": "127.9",
-        "city": "\u0126amrun"
-      },
-      {
-        "speed": "95.7",
-        "city": "Santa Lu\u010bija"
+        "speed": "18.6",
+        "city": "Viangxai"
       }
     ],
+    "country": "Laos",
+    "country_code": "LA"
+  },
+  {
+    "classification": "Gentle breeze (level 3)",
+    "avg_wind_speed": 17.3,
     "rank": 6,
-    "classification": "Violent Storm (level 11)"
-  },
-  {
-    "avg_wind_speed": 104.73333333333333,
-    "country_code": "JM",
-    "country": "Jamaica",
     "entries": [
       {
-        "speed": "128.0",
-        "city": "Wakefield"
-      },
-      {
-        "speed": "124.9",
-        "city": "Cambridge"
-      },
-      {
-        "speed": "116.4",
-        "city": "Portmore"
-      },
-      {
-        "speed": "49.5",
-        "city": "Limit"
-      },
-      {
-        "speed": "105.6",
-        "city": "Stony Hill"
-      },
-      {
-        "speed": "104.0",
-        "city": "Alexandria"
+        "speed": "17.3",
+        "city": "Doloplazy"
       }
     ],
-    "rank": 7,
-    "classification": "Violent Storm (level 11)"
-  },
-  {
-    "avg_wind_speed": 102.80000000000001,
-    "country_code": "PR",
-    "country": "Puerto Rico",
-    "entries": [
-      {
-        "speed": "92.7",
-        "city": "San Juan"
-      },
-      {
-        "speed": "112.9",
-        "city": "San Juan"
-      }
-    ],
-    "rank": 8,
-    "classification": "Whole gale or Storm (level 10)"
-  },
-  {
-    "avg_wind_speed": 102.0,
-    "country_code": "KN",
-    "country": "Saint Kitts and Nevis",
-    "entries": [
-      {
-        "speed": "102.0",
-        "city": "Nicola Town"
-      }
-    ],
-    "rank": 9,
-    "classification": "Whole gale or Storm (level 10)"
-  },
-  {
-    "avg_wind_speed": 101.8,
-    "country_code": "LS",
-    "country": "Lesotho",
-    "entries": [
-      {
-        "speed": "116.3",
-        "city": "Mohale\u2019s Hoek"
-      },
-      {
-        "speed": "87.3",
-        "city": "Maputsoe"
-      }
-    ],
-    "rank": 10,
-    "classification": "Whole gale or Storm (level 10)"
+    "country": "Czech Republic",
+    "country_code": "CZ"
   }
 ]

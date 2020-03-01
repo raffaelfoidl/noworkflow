@@ -20,22 +20,27 @@ def export_provo(trial: Trial, args, extension):
 
     if args.function_defs:
         bundle_def = document.bundle("trial{}DefinitionProv".format(trial.id)) if not bundle_def else bundle_def
+        bundle_def.set_default_namespace(args.defaultns)
         function_defs.export(trial, bundle_def)
 
     if args.modules:
         bundle_dep = document.bundle("trial{}DeploymentProv".format(trial.id))
+        bundle_dep.set_default_namespace(args.defaultns)
         module_deps.export(trial, bundle_dep)
 
     if args.environment:
         bundle_dep = document.bundle("trial{}DeploymentProv".format(trial.id)) if not bundle_dep else bundle_dep
+        bundle_dep.set_default_namespace(args.defaultns)
         environment_attrs.export(trial, bundle_dep)
 
     if args.function_activations:
         bundle_exec = document.bundle("trial{}ExecutionProv".format(trial.id))
+        bundle_exec.set_default_namespace(args.defaultns)
         function_activations.export(trial, bundle_exec, args.recursion_depth)
 
     if args.file_accesses:
         bundle_exec = document.bundle("trial{}ExecutionProv".format(trial.id)) if not bundle_exec else bundle_exec
+        bundle_exec.set_default_namespace(args.defaultns)
         file_accesses.export(trial, bundle_exec)
 
     if bundle_def:

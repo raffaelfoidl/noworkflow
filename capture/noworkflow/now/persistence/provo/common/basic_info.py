@@ -21,7 +21,12 @@ def diff(diff: DiffModel, document: provo.ProvDocument):
 
 
 def _create_trial_info(document: provo.ProvDocument, trial: Trial, suffix=""):
-    document.agent("{}{}".format(trial.script, suffix),
+    invalid_identifiers = ["."]
+    identifier = trial.script
+    for char in invalid_identifiers:
+        identifier = identifier.replace(char, "_")
+
+    document.agent("{}{}".format(identifier, suffix),
                    [(provo.PROV_TYPE, provo.PROV["SoftwareAgent"]),
                     ("codeHash", trial.code_hash),
                     ("script", trial.script),
@@ -32,5 +37,5 @@ def _create_trial_info(document: provo.ProvDocument, trial: Trial, suffix=""):
                        ("parentId", trial.parent_id),
                        ("inheritedId", trial.inherited_id)])
 
-    document.wasAssociatedWith("trial{}Execution".format(trial.id), "{}{}".format(trial.script, suffix), None,
+    document.wasAssociatedWith("trial{}Execution".format(trial.id), "{}{}".format(identifier, suffix), None,
                                "trial{}ExecutionByScript".format(trial.id))

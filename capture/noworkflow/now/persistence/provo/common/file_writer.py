@@ -9,13 +9,17 @@ def persist_document(document, name, format, extension, hide_elem_attr, hide_rel
     print_msg("  Persisting collected provenance to local storage")
 
     filename = "{}{}".format(name, extension)
-    serializers = ["json", "rdf", "provn", "xml"]
-    writers = ["raw", "dot", "jpeg", "png", "svg", "pdf", "plain"]
+    serializers = ["json", "rdf", "provn", "turtle", "rdfxml", "trig", "xml"]
+    rdf_serializers = {"turtle": "turtle", "rdfxml": "xml", "trig": "trig"}
+    writers = ["dot", "jpeg", "png", "svg", "pdf"]
 
     if format in serializers:
         print_msg("    Employing serializer to export to {}".format(format))
         with open(filename, 'w') as file:
-            document.serialize(destination=file, format=format)
+            if format in rdf_serializers:
+                document.serialize(destination=file, format="rdf", rdf_format=rdf_serializers[format])
+            else:
+                document.serialize(destination=file, format=format)
 
     elif format in writers:
         print_msg("    Employing dot writer to export to {}".format(format))

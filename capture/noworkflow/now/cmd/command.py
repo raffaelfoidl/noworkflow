@@ -65,8 +65,8 @@ class Command(object):
 
 class ProvOCommand(Command):
     output_formats = OrderedDict(
-        [("provn", ".pn"), ("xml", ".xml"), ("rdf", ".rdf"), ("json", ".json"), ("pdf", ".pdf"), ("svg", ".svg"),
-         ("dot", ".gv"), ("png", ".png"), ("jpeg", ".jpeg")])
+        [("provn", ".pn"), ("turtle", ".ttl"), ("xml", ".xml"), ("rdfxml", ".xml"), ("trig", ".trig"),
+         ("json", ".json"), ("pdf", ".pdf"), ("svg", ".svg"), ("dot", ".gv"), ("png", ".png"), ("jpeg", ".jpeg")])
 
     def add_provo_export_args(self):
         self.add_argument("--file", type=str,

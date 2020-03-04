@@ -26,7 +26,7 @@ def parse_args():
 
 
 def read_file(path: str) -> List[Entry]:
-    """Read the CSV input data as NamedTuple"""
+	"""Read the CSV input data as NamedTuple"""
     global Entry
     with open(path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")
@@ -44,7 +44,7 @@ def read_file(path: str) -> List[Entry]:
 
 
 def get_classification(speed: float) -> Tuple[float, str]:
-    global root
+	global root
     classes = {
         (0, 0., 1.85): "Calm",
         (1, 1.85, 7.41): "Light Airs",
@@ -147,9 +147,9 @@ def main():
     print("Processing...")
 
     """
-    @begin group_data_by_country @desc split data by country,\nreturning list of sublists
+    @begin group_data_by_country @desc split data by country
     @param data_parsed
-    @out data_by_country
+    @out data_by_country @desc [output] contries grouped by country (list of sublists)
     """
     data_by_country = itertools.groupby(data, key=lambda x: x.country)
     """
@@ -158,7 +158,7 @@ def main():
 
     """
     @begin get_top_ten_by_country @desc 10 countries with highest\navg wind speed
-    @param data_by_country
+    @param data_by_country @desc [input] country-grouped data
     @out country_top_ten
     """
     top_ten_by_country = get_top_ten_by_country(data_by_country)
@@ -185,6 +185,7 @@ def main():
     @begin persist_top_ten_by_country
     @in country_top_ten
     @out summary_by_country @uri file:by_country.json
+    @call get_classification @desc maps wind speed to Beaufort scale
     """
     persist_top_ten_by_country(top_ten_by_country, by_country_path)
     """
@@ -195,6 +196,7 @@ def main():
     @begin persist_top_ten_overall
     @param overall_top_ten
     @out summary_overall @uri file:overall.json
+    @call get_classification
     """
     persist_top_ten_overall(top_ten_overall, overall_path)
     """

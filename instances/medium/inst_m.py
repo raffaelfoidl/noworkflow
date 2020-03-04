@@ -30,7 +30,7 @@ def blur_image(img, sigma=3):
 
 def get_diff(img1, img2):
     """Gets the absolute difference of each and every pixel between the two parameters img1 and img2, whereby
-    img1 denotes the image as it was given as input and img2 describes the one with a Gaussian blur applied to it"""
+    img1 denotes the image as it was given as input and img2 descirbes the one with a Gaussian blur applied to it"""
     if img1.shape != img2.shape:
         print("Error, images are not of same dimensions")
         exit(1)
@@ -47,11 +47,11 @@ def get_diff(img1, img2):
             px_2 = img2[y, x]
             diff = abs(px_1.astype(numpy.int16) - px_2.astype(numpy.int16))
             diff_per_pixel[y][x] = diff.sum()
-
-        new_percentage = int(round((y / img1.shape[0]) * 100, -1))  # round to nearest ten
+        
+        new_percentage = int(round(y / img1.shape[0]) * 100, -1))  # round to nearest ten
         if new_percentage != last_percentage and new_percentage != 100:
-            last_percentage = new_percentage
-            print("{} % done".format(new_percentage))
+        	last_percentage = new_percentage
+        	print("{} % done".format(new_percentage))
 
     return diff_per_pixel
 
@@ -67,8 +67,8 @@ def save_diff_image(path, diffs):
 """
 @begin inst_m.main @desc Blurs an image and computes the differences to the original
 @param sigma @desc sigma for gauss filter
-@in in @desc input file
-@param out @desc output image file path
+@in in @as input_path @desc input file
+@param out @as output_path @desc output image file path
 @param diff @desc diff image file path
 @out diff_file @uri file:{diff}
 @out out_file @uri file:{out}
@@ -84,7 +84,7 @@ def main():
 
     """
     @begin read_input @desc read image from input path
-    @in in
+    @in in @as input_path
     @out input_file
     """
     print("Reading input file...")
@@ -110,8 +110,9 @@ def main():
     """
     @begin save_out_file @desc persist blurred image
     @in blurred_image
-    @in out
+    @in out @as output_path
     @return out_file @uri file:{out}
+        @log Done saving output image
     """
     print("Saving output file...")
     matplotlib.pyplot.imsave(args.output, out_file)
@@ -125,6 +126,8 @@ def main():
     @in input_file
     @in blurred_image
     @out diff_image
+        @log {percentage} % done
+        @log Done caluclating
     """
     print("Calculating differences in pixel colors...")
     diff = get_diff(in_file, out_file)

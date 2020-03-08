@@ -76,9 +76,9 @@ class ProvOCommand(Command):
                           help="set the format of the exported prov-o file; allowed values {" + ", ".join(
                               self.output_formats) +
                                "}}. Default: {}".format(list(self.output_formats.items())[0][0]))
-        self.add_argument("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow",
+        self.add_argument("-n", "--defaultns", type=str, default="https://github.com/gems-uff/noworkflow#",
                           help="set the default namespace for the exported prov-o file. "
-                               "Default: https://github.com/gems-uff/noworkflow")
+                               "Default: https://github.com/gems-uff/noworkflow#")
         self.add_argument("--hide-elem-attr", action="store_true",
                           help="Hide element attributes in a graph to be rendered. Default: not hidden (= option not specified)")
         self.add_argument("--hide-rel-attr", action="store_true",

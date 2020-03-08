@@ -162,10 +162,6 @@ def print_diff(access_extra, args, diff, skip_in_trial):
 class Diff(NotebookCommand, ProvOCommand):
     """Compare the collected provenance of two trials"""
 
-    output_formats = OrderedDict(
-        [("provn", ".pn"), ("xml", ".xml"), ("rdf", ".rdf"), ("json", ".json"), ("pdf", ".pdf"), ("svg", ".svg"),
-         ("dot", ".gv"), ("png", ".png"), ("jpeg", ".jpeg")])
-
     def add_arguments(self):
         add_arg = self.add_argument
         add_arg("trial1", type=str,

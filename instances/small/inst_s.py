@@ -26,7 +26,7 @@ def parse_args():
 
 
 def read_file(path: str) -> List[Entry]:
-	"""Read the CSV input data as NamedTuple"""
+    """Read the CSV input data as NamedTuple"""
     global Entry
     with open(path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")
@@ -44,7 +44,7 @@ def read_file(path: str) -> List[Entry]:
 
 
 def get_classification(speed: float) -> Tuple[float, str]:
-	global root
+    global root
     classes = {
         (0, 0., 1.85): "Calm",
         (1, 1.85, 7.41): "Light Airs",

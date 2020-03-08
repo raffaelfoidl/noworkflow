@@ -1,6 +1,5 @@
 import os
 
-import math
 import numpy
 import matplotlib.pyplot
 import scipy.ndimage
@@ -47,11 +46,11 @@ def get_diff(img1, img2):
             px_2 = img2[y, x]
             diff = abs(px_1.astype(numpy.int16) - px_2.astype(numpy.int16))
             diff_per_pixel[y][x] = diff.sum()
-        
-        new_percentage = int(round(y / img1.shape[0]) * 100, -1))  # round to nearest ten
+
+        new_percentage = int(round((y / img1.shape[0]) * 100, -1))  # round to nearest ten
         if new_percentage != last_percentage and new_percentage != 100:
-        	last_percentage = new_percentage
-        	print("{} % done".format(new_percentage))
+            last_percentage = new_percentage
+            print("{} % done".format(new_percentage))
 
     return diff_per_pixel
 
@@ -127,7 +126,7 @@ def main():
     @in blurred_image
     @out diff_image
         @log {percentage} % done
-        @log Done caluclating
+        @log Done calculating
     """
     print("Calculating differences in pixel colors...")
     diff = get_diff(in_file, out_file)

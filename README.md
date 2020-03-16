@@ -1,6 +1,8 @@
 noWorkflow
 ==========
 
+*Note: This is an adaption of <a target="_blank" href="https://github.com/gems-uff/noworkflow">noWorkflow</a> which was created in the course of my <a target="_blank" href="https://github.com/raffaelfoidl/ProvCaptPyEnvs">bachelor thesis</a> in Software & Information Engineering at University of Technology, Vienna. It has been extended to provide W3C <a target="_blank" href="https://www.w3.org/TR/prov-o/">PROV-O</a> compliant output. For further information on the changes made to the original version and the thought processes behind them, refer to the <a target="_blank" href="https://github.com/raffaelfoidl/ProvCaptPyEnvs/blob/master/thesis.pdf">thesis</a>.*
+
 Copyright (c) 2016 Universidade Federal Fluminense (UFF).
 Copyright (c) 2016 Polytechnic Institute of New York University.
 All rights reserved.

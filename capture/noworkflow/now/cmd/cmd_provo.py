@@ -7,8 +7,6 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
 import os
-import sys
-from collections import OrderedDict
 
 from noworkflow.now.persistence.provo.export import export_writer
 from ..persistence.models import Trial
@@ -19,25 +17,25 @@ from .command import ProvOCommand
 
 
 class ProvO(ProvOCommand):
-    """Show the collected provenance of a trial"""
+    """Export the collected provenance of a trial in PROV-O format"""
 
     def add_arguments(self):
         add_arg = self.add_argument
         add_arg("trial", type=str, nargs="?",
                 help="trial id or none for last trial")
         add_arg("-m", "--modules", action="store_true",
-                help="shows module dependencies")
+                help="exports module dependencies")
         add_arg("-d", "--function-defs", action="store_true",
-                help="shows the user-defined functions")
+                help="exports the user-defined functions")
         add_arg("-e", "--environment", action="store_true",
-                help="shows the environment conditions")
+                help="exports the environment conditions")
         add_arg("-a", "--function-activations", action="store_true",
-                help="shows function activations")
+                help="exports function activations")
         add_arg("-f", "--file-accesses", action="store_true",
-                help="shows read/write access to files")
+                help="exports read/write accesses to files")
         add_arg("-r", "--recursion-depth", type=int, default=0,
-                help="Sets the maximum recursion depth when analyzing function calls within function calls. Any value"
-                     "less than 1 results in no restriction (besides maximum stack size). Default: 0")
+                help="Sets the maximum recursion depth when analyzing function activations from within function activations. Any value"
+                     " less than 1 results in no restriction (besides maximum stack size). Default: 0")
         self.add_provo_export_args()
         add_arg("-v", "--verbose", action="store_true",
                 help="increase output verbosity")

@@ -1,5 +1,4 @@
 import prov.model as provo
-import prov.dot as provo_dot
 
 from noworkflow.now.persistence.models.diff import Diff as DiffModel
 from noworkflow.now.persistence.provo.common import basic_info, module_deps, environment_attrs, file_accesses
@@ -25,9 +24,6 @@ def export_diff(diff: DiffModel, args, extension):
     if args.file_accesses:
         file_accesses.diff(diff, document)
 
-    #with open("hello.pn", "w") as file:
-    #    document.serialize(destination=file, format="provn")
-    #provo_dot.prov_to_dot(document).write("hello.pdf", format="pdf")
     persist_document(document, args.file, args.format, extension,
                      args.hide_elem_attr, args.hide_rel_attr, args.graph_dir)
 

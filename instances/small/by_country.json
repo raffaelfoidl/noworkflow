@@ -1,31 +1,144 @@
 [
   {
+    "country_code": "HU",
+    "avg_wind_speed": 118.3,
     "entries": [
       {
-        "speed": "129.4",
-        "city": "Mlaka pri Kranju"
-      }
-    ],
-    "classification": "Hurricane (level 12)",
-    "avg_wind_speed": 129.4,
-    "rank": 1,
-    "country_code": "SI",
-    "country": "Slovenia"
-  },
-  {
-    "entries": [
+        "speed": "112.0",
+        "city": "Ny\u00edregyh\u00e1za"
+      },
       {
-        "speed": "113.6",
-        "city": "Rubirizi"
+        "speed": "124.6",
+        "city": "Nagykanizsa"
       }
     ],
     "classification": "Violent Storm (level 11)",
-    "avg_wind_speed": 113.6,
-    "rank": 2,
-    "country_code": "UG",
-    "country": "Uganda"
+    "rank": 1,
+    "country": "Hungary"
   },
   {
+    "country_code": "FI",
+    "avg_wind_speed": 115.0,
+    "entries": [
+      {
+        "speed": "115.0",
+        "city": "Saukkola"
+      }
+    ],
+    "classification": "Violent Storm (level 11)",
+    "rank": 2,
+    "country": "Finland"
+  },
+  {
+    "country_code": "PF",
+    "avg_wind_speed": 114.9,
+    "entries": [
+      {
+        "speed": "114.9",
+        "city": "Arue"
+      }
+    ],
+    "classification": "Violent Storm (level 11)",
+    "rank": 3,
+    "country": "French Polynesia"
+  },
+  {
+    "country_code": "BI",
+    "avg_wind_speed": 104.4,
+    "entries": [
+      {
+        "speed": "104.4",
+        "city": "Ngozi"
+      }
+    ],
+    "classification": "Violent Storm (level 11)",
+    "rank": 4,
+    "country": "Burundi"
+  },
+  {
+    "country_code": "CV",
+    "avg_wind_speed": 91.5,
+    "entries": [
+      {
+        "speed": "91.5",
+        "city": "Praia"
+      }
+    ],
+    "classification": "Whole gale or Storm (level 10)",
+    "rank": 5,
+    "country": "Cape Verde"
+  },
+  {
+    "country_code": "UA",
+    "avg_wind_speed": 83.44999999999999,
+    "entries": [
+      {
+        "speed": "91.8",
+        "city": "Kobleve"
+      },
+      {
+        "speed": "75.1",
+        "city": "Rokytne"
+      }
+    ],
+    "classification": "Strong or severe gale (level 9)",
+    "rank": 6,
+    "country": "Ukraine"
+  },
+  {
+    "country_code": "MY",
+    "avg_wind_speed": 83.2,
+    "entries": [
+      {
+        "speed": "41.9",
+        "city": "Kuala Lumpur"
+      },
+      {
+        "speed": "124.5",
+        "city": "Kangar"
+      }
+    ],
+    "classification": "Strong or severe gale (level 9)",
+    "rank": 7,
+    "country": "Malaysia"
+  },
+  {
+    "country_code": "VE",
+    "avg_wind_speed": 81.6,
+    "entries": [
+      {
+        "speed": "99.4",
+        "city": "La Mula"
+      },
+      {
+        "speed": "129.2",
+        "city": "San Juan de los Morros"
+      },
+      {
+        "speed": "16.2",
+        "city": "La Quebrada"
+      }
+    ],
+    "classification": "Strong or severe gale (level 9)",
+    "rank": 8,
+    "country": "Venezuela"
+  },
+  {
+    "country_code": "AT",
+    "avg_wind_speed": 78.6,
+    "entries": [
+      {
+        "speed": "78.6",
+        "city": "Villach"
+      }
+    ],
+    "classification": "Strong or severe gale (level 9)",
+    "rank": 9,
+    "country": "Austria"
+  },
+  {
+    "country_code": "IR",
+    "avg_wind_speed": 76.9,
     "entries": [
       {
         "speed": "76.9",
@@ -33,48 +146,7 @@
       }
     ],
     "classification": "Strong or severe gale (level 9)",
-    "avg_wind_speed": 76.9,
-    "rank": 3,
-    "country_code": "IR",
+    "rank": 10,
     "country": "Iran"
-  },
-  {
-    "entries": [
-      {
-        "speed": "32.0",
-        "city": "Ampelgading"
-      }
-    ],
-    "classification": "Fresh breeze (level 5)",
-    "avg_wind_speed": 32.0,
-    "rank": 4,
-    "country_code": "ID",
-    "country": "Indonesia"
-  },
-  {
-    "entries": [
-      {
-        "speed": "18.6",
-        "city": "Viangxai"
-      }
-    ],
-    "classification": "Gentle breeze (level 3)",
-    "avg_wind_speed": 18.6,
-    "rank": 5,
-    "country_code": "LA",
-    "country": "Laos"
-  },
-  {
-    "entries": [
-      {
-        "speed": "17.3",
-        "city": "Doloplazy"
-      }
-    ],
-    "classification": "Gentle breeze (level 3)",
-    "avg_wind_speed": 17.3,
-    "rank": 6,
-    "country_code": "CZ",
-    "country": "Czech Republic"
   }
 ]

@@ -13,11 +13,18 @@ from os.path import join, dirname, exists
 from textwrap import dedent
 from pkg_resources import resource_string, resource_listdir, resource_isdir
 
-
 MODULE = __name__
 MODULE = MODULE[:MODULE.rfind(".")]
 MODULE = MODULE[:MODULE.rfind(".")]
 NOWORKFLOW_DIR = dirname(dirname(dirname(__file__)))
+
+
+def truncate(input: str, ellipsis: str = "...", max_length: int = 150):
+    if input is None:
+        return None
+
+    half_len = max_length // 2
+    return input[:half_len] + (ellipsis + input[-half_len:] if len(input) > max_length else input[half_len:])
 
 
 def wrap(string, initial="  ", other="\n  "):
@@ -67,7 +74,6 @@ def recursive_copy(origin, destiny):
     else:
         with open(destiny, "wb") as fil:
             fil.write(resource(origin))
-
 
 
 def erase(directory, everything=False):

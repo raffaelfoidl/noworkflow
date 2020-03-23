@@ -7,17 +7,21 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
 import os
+from collections import OrderedDict
 
 from future.utils import viewitems, viewkeys
 
 from ..ipython.converter import create_ipynb
 from ..persistence.models.diff import Diff as DiffModel
 from ..persistence import persistence_config
+from ..utils import io
 from ..utils.io import print_msg
 from ..utils.cross_version import zip_longest
 
 from .cmd_show import print_trial_relationship
-from .command import NotebookCommand
+from .command import NotebookCommand, ProvOCommand
+
+import noworkflow.now.persistence.provo.diff.diff_writer as diff_writer
 
 
 def print_diff_trials(diff, skip=None):
@@ -72,7 +76,7 @@ def print_brief(added, removed, replaced):
     max_column_len = [max(len(text) for text in column)
                       for column in order]
 
-    #max_len = max(len(column) for column in order)
+    # max_len = max(len(column) for column in order)
     for add, rem, cha in zip_longest(*order):
         add = add or ""
         rem = rem or ""
@@ -81,14 +85,81 @@ def print_brief(added, removed, replaced):
             add, rem, cha, *max_column_len))
 
 
-
 def hide_timestamp(elements):
     """Set hide_timestamp of elements"""
     for element in elements:
         element.hide_timestamp = True
 
 
-class Diff(NotebookCommand):
+def print_diff(access_extra, args, diff, skip_in_trial):
+    print_msg("trial diff:", True)
+    print_diff_trials(diff, skip=skip_in_trial)
+    if args.modules:
+        (added, removed, replaced) = diff.modules
+        if args.brief:
+            print_msg("Brief modules diff", True)
+            print_brief(added, removed, replaced)
+        else:
+            print_msg("{} modules added:".format(len(added)), True)
+            print_trial_relationship(added)
+            print()
+
+            print_msg("{} modules removed:".format(len(removed)), True)
+            print_trial_relationship(removed)
+            print()
+
+            print_msg("{} modules replaced:".format(len(replaced)), True)
+            print_replaced_attributes(replaced)
+        print()
+    if args.environment:
+        (added, removed, replaced) = diff.environment
+        if args.brief:
+            print_msg("Brief environment attributes diff", True)
+            print_brief(added, removed, replaced)
+        else:
+            print_msg("{} environment attributes added:".format(
+                len(added)), True)
+            print_trial_relationship(added, breakline="\n", other="\n  ")
+            print()
+
+            print_msg("{} environment attributes removed:".format(
+                len(removed)), True)
+            print_trial_relationship(removed, breakline="\n", other="\n  ")
+            print()
+
+            print_msg("{} environment attributes replaced:".format(
+                len(replaced)), True)
+            print_replaced_environment(replaced)
+        print()
+    if args.file_accesses:
+        (added, removed, replaced) = diff.file_accesses
+        if args.brief:
+            print_msg("Brief file access diff", True)
+            print_brief(added, removed, replaced)
+        else:
+            if args.hide_timestamps:
+                hide_timestamp(added)
+                hide_timestamp(removed)
+            print_msg("{} file accesses added:".format(
+                len(added)), True)
+            print_trial_relationship(added)
+            print()
+
+            print_msg("{} file accesses removed:".format(
+                len(removed)), True)
+            print_trial_relationship(removed)
+            print()
+
+            print_msg("{} file accesses replaced:".format(
+                len(replaced)), True)
+            print_replaced_attributes(
+                replaced,
+                extra=access_extra,
+                ignore=("id", "trial_id", "function_activation_id"),
+                names={"stack": "Function"})
+
+
+class Diff(NotebookCommand, ProvOCommand):
     """Compare the collected provenance of two trials"""
 
     def add_arguments(self):
@@ -104,9 +175,14 @@ class Diff(NotebookCommand):
         add_arg("-f", "--file-accesses", action="store_true",
                 help="compare read/write access to files")
         add_arg("-t", "--hide-timestamps", action="store_true",
-                help="hide timestamps")
+                help="hide timestamps (does not apply to -p option)")
         add_arg("--brief", action="store_true",
-                help="display a concise version of diff")
+                help="display a concise version of diff (does not apply to -p option)")
+        add_arg("-p", "--provo", action="store_true",
+                help="export comparison as prov-o document; suppresses console output")
+        self.add_provo_export_args()
+        add_arg("-v", "--verbose", action="store_true",
+                help="increase output verbosity")
         add_arg("--dir", type=str,
                 help="set project path where is the database. Default to "
                      "current directory")
@@ -127,76 +203,15 @@ class Diff(NotebookCommand):
 
         diff = DiffModel(args.trial1, args.trial2)
 
-        print_msg("trial diff:", True)
-        print_diff_trials(diff, skip=skip_in_trial)
+        io.verbose = args.verbose
+        if not args.provo:
+            print_diff(access_extra, args, diff, skip_in_trial)
+        else:
+            if args.file is None:
+                args.file = "trialComparison{}_{}".format(diff.trial1.id, diff.trial2.id)
 
-        if args.modules:
-            (added, removed, replaced) = diff.modules
-            if args.brief:
-                print_msg("Brief modules diff", True)
-                print_brief(added, removed, replaced)
-            else:
-                print_msg("{} modules added:".format(len(added)), True)
-                print_trial_relationship(added)
-                print()
-
-                print_msg("{} modules removed:".format(len(removed)), True)
-                print_trial_relationship(removed)
-                print()
-
-                print_msg("{} modules replaced:".format(len(replaced)), True)
-                print_replaced_attributes(replaced)
-            print()
-
-        if args.environment:
-            (added, removed, replaced) = diff.environment
-            if args.brief:
-                print_msg("Brief environment attributes diff", True)
-                print_brief(added, removed, replaced)
-            else:
-                print_msg("{} environment attributes added:".format(
-                    len(added)), True)
-                print_trial_relationship(added, breakline="\n", other="\n  ")
-                print()
-
-                print_msg("{} environment attributes removed:".format(
-                    len(removed)), True)
-                print_trial_relationship(removed, breakline="\n", other="\n  ")
-                print()
-
-                print_msg("{} environment attributes replaced:".format(
-                    len(replaced)), True)
-                print_replaced_environment(replaced)
-            print()
-
-        if args.file_accesses:
-            (added, removed, replaced) = diff.file_accesses
-            if args.brief:
-                print_msg("Brief file access diff", True)
-                print_brief(added, removed, replaced)
-            else:
-                if args.hide_timestamps:
-                    hide_timestamp(added)
-                    hide_timestamp(removed)
-                print_msg("{} file accesses added:".format(
-                    len(added)), True)
-                print_trial_relationship(added)
-                print()
-
-                print_msg("{} file accesses removed:".format(
-                    len(removed)), True)
-                print_trial_relationship(removed)
-                print()
-
-                print_msg("{} file accesses replaced:".format(
-                    len(replaced)), True)
-                print_replaced_attributes(
-                    replaced,
-                    extra=access_extra,
-                    ignore=("id", "trial_id", "function_activation_id"),
-                    names={"stack": "Function"})
-
-
+            self.validate_export_params(args.format, args.graph_dir)
+            diff_writer.export_diff(diff, args, self.get_extension(args.format))
 
     def execute_export(self, args):
         persistence_config.content_engine = args.content_engine
